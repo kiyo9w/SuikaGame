@@ -4,19 +4,32 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class GamePanel extends JPanel implements ActionListener, MouseListener {
+
+
+public class GamePanel extends JPanel implements ActionListener,KeyListener, MouseListener {
     private Timer timer;
     private ArrayList<Fruit> fruits;
     private Random random = new Random();
     private int specialFruitTimer = 0; // Counts frames to drop special fruits
-    private final int SPECIAL_FRUIT_INTERVAL = 12000 / 16; // Approximately every 12 seconds
+    private final int SPECIAL_FRUIT_INTERVAL = 3000 / 16; // Approximately every 12 seconds
+    private int playerX; // Tọa độ X của người chơi (tọa độ Y cố định trên thanh)
+    private final int BAR_Y_POSITION = 100; // 20cm dưới đỉnh
+    private final int PLAYER_WIDTH = 50; // Chiều rộng người chơi
+    private final int PLAYER_HEIGHT = 20;
+    private final int PLAYER_SPEED = 10; // Tốc độ di chuyển
+    private int barWidth; // Biến lưu chiều dài của thanh
+    private final int BAR_HEIGHT = 10; // Chiều cao của thanh
+
 
     public GamePanel() {
         timer = new Timer(16, this);
         timer.start();
         fruits = new ArrayList<>();
+        playerX = 100; // Vị trí ban đầu của người chơi trên thanh
+        addKeyListener(this);
         addMouseListener(this);
         setFocusable(true);
+        requestFocusInWindow();
     }
 
     @Override
@@ -29,8 +42,41 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener {
         for (Fruit fruit : fruits) {
             fruit.draw(g);
         }
+        g.setColor(Color.GRAY);
+        g.fillRect(0, BAR_Y_POSITION, getWidth(), 10);
+      
+
+        // Vẽ người chơi trên thanh
+        g.setColor(Color.BLUE);
+        g.fillRect(playerX, BAR_Y_POSITION - PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT); // Hình chữ nhật đại diện người chơi
+    }
+    
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+            playerX = Math.max(0, playerX - PLAYER_SPEED); // Di chuyển sang trái, giới hạn ở tọa độ 0
+        } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+            playerX = Math.min(getWidth() - PLAYER_WIDTH, playerX + PLAYER_SPEED); // Di chuyển sang phải, giới hạn ở chiều rộng của cửa sổ
+        }
+         else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+            int fruitType = getRandomFruitType();
+            Fruit newFruit = new Fruit(playerX + PLAYER_WIDTH / 2,100,fruitType);
+            fruits.add(newFruit);
+            System.out.println("Mouse clicked at: " + playerX + PLAYER_WIDTH / 2 + ", " + 100);
+            dropObject(playerX);
+        }
+        repaint(); // Vẽ lại game panel
+    }
+  
+    @Override
+    public void keyReleased(KeyEvent e) {
+        // Không cần xử lý gì ở đây cho trường hợp này
     }
 
+    @Override
+    public void keyTyped(KeyEvent e) {
+        // Không cần xử lý gì ở đây cho trường hợp này
+    }
     @Override
     public void actionPerformed(ActionEvent e) {
         // Update fruits
@@ -246,15 +292,20 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener {
             }
         }
     }
-
+    private void dropObject(int xPosition) {
+        // Logic để thả một đối tượng từ tọa độ xPosition
+        System.out.println("Dropping object from X position: " + xPosition);
+    }
     @Override
     public void mouseClicked(MouseEvent e) {
         // Spawn a random fruit between types 1-4 with specified probabilities
-        int fruitType = getRandomFruitType();
-        Fruit newFruit = new Fruit(e.getX(), e.getY(), fruitType);
-        fruits.add(newFruit);
+    //     int fruitType = getRandomFruitType();
+    //     Fruit newFruit = new Fruit(e.getX(), 100, fruitType);
+    //     fruits.add(newFruit);
+    //     System.out.println("Mouse clicked at: " + e.getX() + ", " + e.getY());
+    //     dropObject(playerX);
+    // }
     }
-
     private int getRandomFruitType() {
         int randomValue = random.nextInt(100) + 1; // Random number between 1 and 100
         if (randomValue <= 55) {
