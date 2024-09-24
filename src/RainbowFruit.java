@@ -18,7 +18,7 @@ public class RainbowFruit extends Fruit {
 
     @Override
     public boolean canMergeWith(Fruit other) {
-        // Can merge with any fruit
-        return true;
+        // Can merge with any fruit except special fruits
+        return !(other instanceof BombFruit || other instanceof FreezeFruit || other instanceof RainbowFruit);
     }
 }
