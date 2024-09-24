@@ -18,6 +18,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
     private final int PLAYER_WIDTH = 50; // Player's width
     private final int PLAYER_HEIGHT = 20;
     private final int PLAYER_SPEED = 10; // Movement speed
+    private boolean gameOver = false;
+    private int accumulatedHeight = 0; // Chiều cao tích lũy của đống quả
+
 
     public GamePanel() {
         timer = new Timer(16, this);
@@ -64,9 +67,12 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
             playerX = Math.min(getWidth() - PLAYER_WIDTH, playerX + PLAYER_SPEED); // Move right, limit at window width
         } else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             int fruitType = getRandomFruitType();
-            Fruit newFruit = new Fruit(playerX + PLAYER_WIDTH / 2, BAR_Y_POSITION - PLAYER_HEIGHT, fruitType);
+            Fruit newFruit = new Fruit(playerX + PLAYER_WIDTH / 2, BAR_Y_POSITION - PLAYER_HEIGHT+40, fruitType);
             fruits.add(newFruit);
             dropObject(playerX);
+        }
+        if (gameOver) {
+            return; // Không xử lý chuột nếu trò chơi đã kết thúc
         }
         repaint(); // Repaint the game panel
     }
@@ -122,8 +128,32 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
                 fruit.setY(fruit.getSize() / 2);
                 fruit.setVy(-fruit.getVy() * 0.8);
             }
+            
         }
-
+        if (!gameOver) {
+            // Cập nhật vị trí của từng quả
+            for (int i = 0; i < fruits.size(); i++) {
+                Fruit fruit = fruits.get(i);
+    
+                // Giả sử tốc độ rơi của quả là 2 pixel mỗi frame
+                fruit.setY(fruit.getY() + 2);  // Tăng tọa độ Y để quả rơi xuống
+    
+                // Kiểm tra nếu quả vượt quá thanh bar
+                if (fruit.getY() <= BAR_Y_POSITION) {
+                    // Xử lý logic khi quả chạm thanh bar
+                    gameOver = true;
+                    System.out.println("Fruit has hit the bar.");
+                    
+                }
+            }
+            repaint();
+    
+            // Vẽ lại màn hình
+            repaint();
+        } else {
+            timer.stop(); // Dừng trò chơi khi game over
+        }
+        
         // Handle collisions without modifying the fruits list directly
         checkCollisions(fruitsToRemove, fruitsToAdd);
 
