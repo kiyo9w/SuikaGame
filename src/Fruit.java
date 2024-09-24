@@ -7,6 +7,7 @@ public class Fruit {
     private int type;
     private int size;
     private boolean frozen = false;
+    private boolean landed = false; // Indicates if the fruit has landed
 
     public Fruit(double x, double y, int type) {
         this.x = x;
@@ -29,7 +30,7 @@ public class Fruit {
 
     public void draw(Graphics g) {
         if (frozen) {
-            g.setColor(new Color(220,243,255));
+            g.setColor(new Color(220, 243, 255));
         } else {
             g.setColor(getColor());
         }
@@ -50,14 +51,23 @@ public class Fruit {
                 return Color.BLUE; // Level 5 fruit
             case 6:
                 return Color.MAGENTA; // Level 6 fruit
+            case 7:
+                return Color.BLACK; // Bomb fruit
+            case 8:
+                return Color.PINK; // Rainbow fruit
+            case 9:
+                return Color.CYAN; // Freeze fruit
             default:
                 return Color.GRAY;
         }
     }
 
     private int getSizeFromType(int type) {
-        // Define sizes for different fruit levels
-        return 30 + (type - 1) * 20; // Level 1: 30, Level 2: 40, etc.
+        // Define sizes for different fruit levels, 35 for special
+        if (type < 0) {
+            return 35;
+        }
+        return 30 + (type - 1) * 22; // Adjusted sizes for better gameplay
     }
 
     // Getters and setters
@@ -93,5 +103,13 @@ public class Fruit {
             return false;
         }
         return this.getType() == other.getType();
+    }
+
+    public boolean isLanded() {
+        return landed;
+    }
+
+    public void setLanded(boolean landed) {
+        this.landed = landed;
     }
 }

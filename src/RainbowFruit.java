@@ -3,8 +3,8 @@ import java.awt.Graphics;
 
 public class RainbowFruit extends Fruit {
 
-    public RainbowFruit(double x, double y) {
-        super(x, y, 1); // Base type
+    public RainbowFruit(double x, double y, int type) {
+        super(x, y, type); // Base type
     }
 
     @Override
@@ -18,7 +18,7 @@ public class RainbowFruit extends Fruit {
 
     @Override
     public boolean canMergeWith(Fruit other) {
-        // Can merge with any fruit
-        return true;
+        // Can merge with any fruit except special fruits
+        return !(other instanceof BombFruit || other instanceof FreezeFruit || other instanceof RainbowFruit);
     }
 }

@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.List;
 
 public class FreezeFruit extends Fruit {
 
@@ -12,7 +13,7 @@ public class FreezeFruit extends Fruit {
     public void draw(Graphics g) {
         super.draw(g);
         // Draw a freeze indicator
-        g.setColor(Color.BLUE);
+        g.setColor(Color.WHITE);
         g.drawString("F", (int) getX() - 5, (int) getY() + 5);
     }
 
@@ -23,9 +24,9 @@ public class FreezeFruit extends Fruit {
         // So no additional logic here
     }
 
-    public void freezeNearbyFruits(ArrayList<Fruit> fruits) {
+    public void freezeNearbyFruits(List<Fruit> fruits) {
         // Find the 5 closest fruits and freeze them
-        ArrayList<FruitDistance> distances = new ArrayList<>();
+        List<FruitDistance> distances = new ArrayList<>();
         for (Fruit fruit : fruits) {
             if (fruit != this && !fruit.isFrozen()) {
                 double distance = Math.hypot(fruit.getX() - getX(), fruit.getY() - getY());
