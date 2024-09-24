@@ -56,8 +56,11 @@ public class Fruit {
     }
 
     private int getSizeFromType(int type) {
-        // Define sizes for different fruit levels
-        return 30 + (type - 1) * 20; // Level 1: 30, Level 2: 40, etc.
+        // Define sizes for different fruit levels, 35 for special
+        if(type >= 7){
+            return 35;
+        }
+        return 30 + (type - 1) * 23;// Level 1: 30, Level 2: 40, etc.
     }
 
     // Getters and setters

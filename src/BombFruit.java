@@ -12,7 +12,7 @@ public class BombFruit extends Fruit {
     @Override
     public void update() {
         super.update();
-        if (true) { // Start countdown after bomb has landed
+        if (getVy() == 0) { // Start countdown after bomb has landed
             timer--;
         }
     }

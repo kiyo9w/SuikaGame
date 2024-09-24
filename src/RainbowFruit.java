@@ -3,8 +3,8 @@ import java.awt.Graphics;
 
 public class RainbowFruit extends Fruit {
 
-    public RainbowFruit(double x, double y) {
-        super(x, y, 1); // Base type
+    public RainbowFruit(double x, double y, int type) {
+        super(x, y, type); // Base type
     }
 
     @Override

@@ -142,16 +142,16 @@ public class GamePanel extends JPanel implements ActionListener,KeyListener, Mou
         Fruit specialFruit;
         switch (specialType) {
             case 0:
-                specialFruit = new BombFruit(xPosition, 0, 1);
+                specialFruit = new BombFruit(xPosition, 100, 7);
                 break;
             case 1:
-                specialFruit = new RainbowFruit(xPosition, 0);
+                specialFruit = new RainbowFruit(xPosition, 100, 8);
                 break;
             case 2:
-                specialFruit = new FreezeFruit(xPosition, 0, 1);
+                specialFruit = new FreezeFruit(xPosition, 100, 9);
                 break;
             default:
-                specialFruit = new Fruit(xPosition, 0, 1);
+                specialFruit = new Fruit(xPosition, 100, 9);
                 break;
         }
         fruits.add(specialFruit);
