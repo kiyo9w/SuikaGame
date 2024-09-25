@@ -41,23 +41,23 @@ public class Fruit {
     private Color getColor() {
         switch (type) {
             case 1:
-                return Color.RED; // Level 1 fruit
+                return new Color(243, 34, 35); // Level 1 fruit
             case 2:
-                return Color.ORANGE; // Level 2 fruit
+                return new Color(172, 108, 255); // Level 2 fruit
             case 3:
-                return Color.YELLOW; // Level 3 fruit
+                return new Color(247, 186, 0); // Level 3 fruit
             case 4:
-                return Color.GREEN; // Level 4 fruit
+                return new Color(250, 8, 14); // Level 4 fruit
             case 5:
-                return Color.BLUE; // Level 5 fruit
+                return new Color(253, 239, 157); // Level 5 fruit
             case 6:
-                return Color.MAGENTA; // Level 6 fruit
+                return new Color(255, 181, 172); // Level 6 fruit
             case 7:
-                return Color.BLACK; // Bomb fruit
+                return new Color(248, 238, 17); // Bomb fruit
             case 8:
-                return Color.PINK; // Rainbow fruit
+                return new Color(159, 221, 15); // Rainbow fruit
             case 9:
-                return Color.CYAN; // Freeze fruit
+                return new Color(66, 179, 7); // Freeze fruit
             default:
                 return Color.GRAY;
         }
@@ -68,7 +68,7 @@ public class Fruit {
         if (type < 0) {
             return 35;
         }
-        return 30 + (type - 1) * 22;
+        return 30 * (type - 1) + 30;
     }
     public int getQueueSize() {
         return 20 + (type - 1) * 10;
