@@ -7,7 +7,8 @@ public class Fruit {
     private int type;
     private int size;
     private boolean frozen = false;
-    private boolean landed = false; // Indicates if the fruit has landed
+    private boolean landed = false;
+    private int freezeStage = 0;
 
     public Fruit(double x, double y, int type) {
         this.x = x;
@@ -92,10 +93,19 @@ public class Fruit {
 
     public void freeze() {
         frozen = true;
+        freezeStage = 5;
     }
 
     public void unfreeze() {
         frozen = false;
+        freezeStage = 0;
+    }
+
+    public void decrementFreezeStage() {
+        freezeStage--;
+        if (freezeStage <= 0) {
+            unfreeze();
+        }
     }
 
     public boolean canMergeWith(Fruit other) {

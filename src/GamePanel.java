@@ -20,6 +20,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
     private final int PLAYER_SPEED = 10; // Movement speed
     private boolean gameOver = false;
     private int accumulatedHeight = 0; // Chiều cao tích lũy của đống quả
+    private int dropCount = 0;
+
 
 
     public GamePanel() {
@@ -62,20 +64,29 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
     @Override
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-            playerX = Math.max(0, playerX - PLAYER_SPEED); // Move left, limit at coordinate 0
+            playerX = Math.max(0, playerX - PLAYER_SPEED);
         } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-            playerX = Math.min(getWidth() - PLAYER_WIDTH, playerX + PLAYER_SPEED); // Move right, limit at window width
+            playerX = Math.min(getWidth() - PLAYER_WIDTH, playerX + PLAYER_SPEED);
         } else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             int fruitType = getRandomFruitType();
-            Fruit newFruit = new Fruit(playerX + PLAYER_WIDTH / 2, BAR_Y_POSITION - PLAYER_HEIGHT+40, fruitType);
+            Fruit newFruit = new Fruit(playerX + PLAYER_WIDTH / 2, BAR_Y_POSITION - PLAYER_HEIGHT + 40, fruitType);
             fruits.add(newFruit);
             dropObject(playerX);
+            dropCount++;
+
+            // Decrement freeze stages of all frozen fruits (5)
+            for (Fruit fruit : fruits) {
+                if (fruit.isFrozen()) {
+                    fruit.decrementFreezeStage();
+                }
+            }
         }
         if (gameOver) {
-            return; // Không xử lý chuột nếu trò chơi đã kết thúc
+            return;
         }
-        repaint(); // Repaint the game panel
+        repaint();
     }
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -93,7 +104,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
             // Remove bomb if timer reaches zero
             if (fruit instanceof BombFruit) {
                 BombFruit bombFruit = (BombFruit) fruit;
-                if (bombFruit.shouldExplode()) {
+                if (bombFruit.shouldExplode(dropCount)) {
                     bombFruit.explode(fruits, fruitsToRemove);
                     fruitsToRemove.add(bombFruit);
                     continue;
@@ -178,7 +189,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
         Fruit specialFruit;
         switch (specialType) {
             case 0:
-                specialFruit = new BombFruit(xPosition, 100, -1);
+                specialFruit = new BombFruit(xPosition, 100, -1, dropCount);
                 break;
             case 1:
                 specialFruit = new RainbowFruit(xPosition, 100, -2);
@@ -321,7 +332,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
                 double dist = Math.hypot(dx, dy);
                 double minDist = (fruit.getSize() + mergedFruit.getSize()) / 2.0;
                 if (dist < minDist) {
-                    ((BombFruit) fruit).resetTimer();
+                    ((BombFruit) fruit).resetDropCount(dropCount);
                 }
             }
         }
