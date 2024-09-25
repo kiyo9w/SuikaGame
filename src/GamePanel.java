@@ -177,31 +177,31 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
                 fruit.setY(fruit.getSize() / 2);
                 fruit.setVy(-fruit.getVy() * 0.8);
             }
-            
-        }
-        if (!gameOver) {
-            // Cập nhật vị trí của từng quả
-            for (int i = 0; i < fruits.size(); i++) {
-                Fruit fruit = fruits.get(i);
-    
-                // Giả sử tốc độ rơi của quả là 2 pixel mỗi frame
-                fruit.setY(fruit.getY() + 2);  // Tăng tọa độ Y để quả rơi xuống
-    
-                // Kiểm tra nếu quả vượt quá thanh bar
-                if (fruit.getY() <= BAR_Y_POSITION) {
-                    // Xử lý logic khi quả chạm thanh bar
-                    gameOver = true;
-                    System.out.println("Fruit has hit the bar.");
-                    
+            if (!gameOver) {
+                // Cập nhật vị trí của từng quả
+                for (int i = 0; i < fruits.size(); i++) {
+                    Fruit fruitss = fruits.get(i);
+        
+                    // Giả sử tốc độ rơi của quả là 2 pixel mỗi frame
+                    fruitss.setY(fruitss.getY() );  // Tăng tọa độ Y để quả rơi xuống
+        
+                    // Kiểm tra nếu quả vượt quá thanh bar
+                    if (fruitss.getY() < BAR_Y_POSITION) {
+                        // Xử lý logic khi quả chạm thanh bar
+                        gameOver = true;
+                        System.out.println("Fruit has hit the bar.");
+                        
+                    }
                 }
+                
+        
+                // Vẽ lại màn hình
+                repaint();
+            } else {
+                timer.stop(); // Dừng trò chơi khi game over
             }
-            repaint();
-    
-            // Vẽ lại màn hình
-            repaint();
-        } else {
-            timer.stop(); // Dừng trò chơi khi game over
         }
+       
         
         // Handle collisions without modifying the fruits list directly
         checkCollisions(fruitsToRemove, fruitsToAdd);
@@ -228,15 +228,16 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
         switch (specialType) {
             case 0:
                 specialFruit = new BombFruit(xPosition, 100, -1, dropCount);
+                specialFruit = new BombFruit(xPosition, 140, -1);
                 break;
             case 1:
-                specialFruit = new RainbowFruit(xPosition, 100, -2);
+                specialFruit = new RainbowFruit(xPosition, 140, -2);
                 break;
             case 2:
-                specialFruit = new FreezeFruit(xPosition, 100, -3);
+                specialFruit = new FreezeFruit(xPosition, 140, -3);
                 break;
             default:
-                specialFruit = new Fruit(xPosition, 100, 3);
+                specialFruit = new Fruit(xPosition, 140, 3);
                 break;
         }
         fruits.add(specialFruit);
