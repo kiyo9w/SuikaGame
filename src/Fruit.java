@@ -7,7 +7,8 @@ public class Fruit {
     private int type;
     private int size;
     private boolean frozen = false;
-    private boolean landed = false; // Indicates if the fruit has landed
+    private boolean hasCollided = false;
+    private int freezeStage = 0;
 
     public Fruit(double x, double y, int type) {
         this.x = x;
@@ -67,8 +68,33 @@ public class Fruit {
         if (type < 0) {
             return 35;
         }
-        return 30 + (type - 1) * 22; // Adjusted sizes for better gameplay
+        return 30 + (type - 1) * 22;
     }
+    public int getQueueSize() {
+        return 20 + (type - 1) * 10;
+    }
+
+
+    public void drawAt(Graphics g, double drawX, double drawY, int displaySize) {
+        // Set color based on fruit type or frozen state
+        if (isFrozen()) {
+            g.setColor(new Color(220, 243, 255));
+        } else {
+            g.setColor(getColor());
+        }
+        // Draw the fruit with the specified display size
+        g.fillOval((int) (drawX - displaySize / 2), (int) (drawY - displaySize / 2), displaySize, displaySize);
+
+        // Draw special indicators if needed
+        if (isFrozen()) {
+            g.setColor(Color.BLUE);
+            g.drawString(String.valueOf(freezeStage), (int) drawX - 5, (int) drawY + 5);
+        }
+    }
+
+
+
+
 
     // Getters and setters
     public double getX() { return x; }
@@ -92,10 +118,19 @@ public class Fruit {
 
     public void freeze() {
         frozen = true;
+        freezeStage = 5;
     }
 
     public void unfreeze() {
         frozen = false;
+        freezeStage = 0;
+    }
+
+    public void decrementFreezeStage() {
+        freezeStage--;
+        if (freezeStage <= 0) {
+            unfreeze();
+        }
     }
 
     public boolean canMergeWith(Fruit other) {
@@ -105,11 +140,11 @@ public class Fruit {
         return this.getType() == other.getType();
     }
 
-    public boolean isLanded() {
-        return landed;
+    public boolean hasCollided() {
+        return hasCollided;
     }
 
-    public void setLanded(boolean landed) {
-        this.landed = landed;
+    public void setHasCollided(boolean collided) {
+        this.hasCollided = collided;
     }
 }
