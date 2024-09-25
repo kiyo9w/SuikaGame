@@ -12,8 +12,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
     private Timer timer;
     private ArrayList<Fruit> fruits;
     private Random random = new Random();
-    private int specialFruitTimer = 0; // Counts frames to drop special fruits
-    private final int SPECIAL_FRUIT_INTERVAL = 3000 / 16; // Approximately every 12 seconds
+//    private int specialFruitTimer = 0; // Counts frames to drop special fruits
+//    private final int SPECIAL_FRUIT_INTERVAL = 3000 / 16; // Approximately every 12 seconds
     private int playerX; // Player's X coordinate (Y coordinate is fixed on the bar)
     private final int BAR_Y_POSITION = 100; // Position of the bar from the top
     private final int PLAYER_WIDTH = 50; // Player's width
@@ -22,6 +22,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
     private boolean gameOver = false;
     private LinkedList<Fruit> fruitQueue;
     private int dropCount = 0;
+    private Fruit lastDroppedFruit = null;
 
 
 
@@ -91,22 +92,30 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
         } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
             playerX = Math.min(getWidth() - PLAYER_WIDTH, playerX + PLAYER_SPEED);
         } else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-            Fruit newFruit = fruitQueue.removeFirst();
-            newFruit.setX(playerX + PLAYER_WIDTH / 2);
-            newFruit.setY(BAR_Y_POSITION - PLAYER_HEIGHT + 40);
-            fruits.add(newFruit);
-            dropObject(playerX);
-            dropCount++;
+            if (lastDroppedFruit == null || lastDroppedFruit.hasCollided()) {
+                Fruit newFruit = fruitQueue.removeFirst();
+                newFruit.setX(playerX + PLAYER_WIDTH / 2);
+                newFruit.setY(BAR_Y_POSITION - PLAYER_HEIGHT + 40);
+                fruits.add(newFruit);
+                dropObject(playerX);
+                dropCount++;
 
-            // Generate a new fruit and add it to the end of the queue
-            int fruitType = getRandomFruitType();
-            Fruit nextFruit = new Fruit(0, 0, fruitType);
-            fruitQueue.addLast(nextFruit);
+                // Generate a new fruit and add it to the end of the queue
+                int fruitType = getRandomFruitType();
+                Fruit nextFruit = new Fruit(0, 0, fruitType);
+                fruitQueue.addLast(nextFruit);
 
-            // Decrement freeze stages of all frozen fruits (5)
-            for (Fruit fruit : fruits) {
-                if (fruit.isFrozen()) {
-                    fruit.decrementFreezeStage();
+                // Decrement freeze stages of all frozen fruits (5)
+                for (Fruit fruit : fruits) {
+                    if (fruit.isFrozen()) {
+                        fruit.decrementFreezeStage();
+                    }
+                }
+                lastDroppedFruit = newFruit;
+
+                // Check if it's time to drop a special fruit
+                if (dropCount % 8 == 0) {
+                    dropSpecialFruit();
                 }
             }
         }
@@ -156,7 +165,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
                 fruit.setVx(fruit.getVx() * 0.95); // Friction
                 if (Math.abs(fruit.getVy()) < 1) {
                     fruit.setVy(0);
-                    fruit.setLanded(true); // Mark as landed
+                    fruit.setHasCollided(true); // Mark as landed
                 }
                 if (Math.abs(fruit.getVx()) < 0.1) {
                     fruit.setVx(0);
@@ -202,11 +211,11 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
         fruits.addAll(fruitsToAdd);
 
         // Special fruit drop logic
-        specialFruitTimer++;
-        if (specialFruitTimer >= SPECIAL_FRUIT_INTERVAL) {
-            dropSpecialFruit();
-            specialFruitTimer = 0;
-        }
+//        specialFruitTimer++;
+//        if (specialFruitTimer >= SPECIAL_FRUIT_INTERVAL) {
+//            dropSpecialFruit();
+//            specialFruitTimer = 0;
+//        }
 
         repaint();
     }
@@ -288,6 +297,10 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
                     f2.setVx(f2.getVx() * 0.95);
                     f2.setVy(f2.getVy() * 0.95);
 
+                    // **Add these lines to mark fruits as having collided**
+                    f1.setHasCollided(true);
+                    f2.setHasCollided(true);
+
                     boolean mergeOccurred = false;
                     Fruit newFruit = null;
 
@@ -338,6 +351,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
             }
         }
     }
+
 
     private void unfreezeAdjacentFruits(Fruit mergedFruit) {
         for (Fruit fruit : fruits) {

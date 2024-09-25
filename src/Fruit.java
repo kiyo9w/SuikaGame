@@ -7,7 +7,7 @@ public class Fruit {
     private int type;
     private int size;
     private boolean frozen = false;
-    private boolean landed = false;
+    private boolean hasCollided = false;
     private int freezeStage = 0;
 
     public Fruit(double x, double y, int type) {
@@ -140,11 +140,11 @@ public class Fruit {
         return this.getType() == other.getType();
     }
 
-    public boolean isLanded() {
-        return landed;
+    public boolean hasCollided() {
+        return hasCollided;
     }
 
-    public void setLanded(boolean landed) {
-        this.landed = landed;
+    public void setHasCollided(boolean collided) {
+        this.hasCollided = collided;
     }
 }
