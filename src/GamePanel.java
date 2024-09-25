@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.List;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.LinkedList;
 
 public class GamePanel extends JPanel implements ActionListener, KeyListener, MouseListener {
     private Timer timer;
@@ -19,7 +20,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
     private final int PLAYER_HEIGHT = 20;
     private final int PLAYER_SPEED = 10; // Movement speed
     private boolean gameOver = false;
-    private int accumulatedHeight = 0; // Chiều cao tích lũy của đống quả
+    private LinkedList<Fruit> fruitQueue;
     private int dropCount = 0;
 
 
@@ -32,6 +33,12 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
         addKeyListener(this);
         addMouseListener(this);
         setFocusable(true);
+        fruitQueue = new LinkedList<>();
+        for (int i = 0; i < 8; i++) {
+            int fruitType = getRandomFruitType();
+            Fruit fruit = new Fruit(0, 0, fruitType);
+            fruitQueue.add(fruit);
+        }
     }
 
     @Override
@@ -43,9 +50,25 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+
         // Clear the background
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, getWidth(), getHeight());
+
+        // Draw the fruit queue in a circle
+        int queueSize = fruitQueue.size();
+        int boxSize = 50; // Fixed box size for each fruit
+        int startX = getWidth() - boxSize / 2 - 10;
+        int startY = boxSize / 2 + 10;
+
+        for (int i = 0; i < queueSize; i++) {
+            Fruit fruit = fruitQueue.get(i);
+            int x = startX - i * (boxSize + 5);
+            int y = startY;
+            int displaySize = fruit.getQueueSize();
+            fruit.drawAt(g, x, y, displaySize);
+        }
+
 
         // Draw the fruits
         for (Fruit fruit : fruits) {
@@ -56,9 +79,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
         g.setColor(Color.GRAY);
         g.fillRect(0, BAR_Y_POSITION, getWidth(), 10);
 
-        // Draw the player on the bar
-        g.setColor(Color.BLUE);
-        g.fillRect(playerX, BAR_Y_POSITION - PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT); // Rectangle representing the player
+        // Draw the player (fruit)
+        Fruit nextFruit = fruitQueue.getFirst();
+        nextFruit.drawAt(g, playerX + PLAYER_WIDTH / 2, BAR_Y_POSITION - PLAYER_HEIGHT + 40, nextFruit.getSize());
     }
 
     @Override
@@ -68,11 +91,17 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
         } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
             playerX = Math.min(getWidth() - PLAYER_WIDTH, playerX + PLAYER_SPEED);
         } else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-            int fruitType = getRandomFruitType();
-            Fruit newFruit = new Fruit(playerX + PLAYER_WIDTH / 2, BAR_Y_POSITION - PLAYER_HEIGHT + 40, fruitType);
+            Fruit newFruit = fruitQueue.removeFirst();
+            newFruit.setX(playerX + PLAYER_WIDTH / 2);
+            newFruit.setY(BAR_Y_POSITION - PLAYER_HEIGHT + 40);
             fruits.add(newFruit);
             dropObject(playerX);
             dropCount++;
+
+            // Generate a new fruit and add it to the end of the queue
+            int fruitType = getRandomFruitType();
+            Fruit nextFruit = new Fruit(0, 0, fruitType);
+            fruitQueue.addLast(nextFruit);
 
             // Decrement freeze stages of all frozen fruits (5)
             for (Fruit fruit : fruits) {
@@ -101,7 +130,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
 
             fruit.update();
 
-            // Remove bomb if timer reaches zero
+            // Explode the thingy
             if (fruit instanceof BombFruit) {
                 BombFruit bombFruit = (BombFruit) fruit;
                 if (bombFruit.shouldExplode(dropCount)) {

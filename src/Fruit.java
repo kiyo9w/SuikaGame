@@ -68,8 +68,33 @@ public class Fruit {
         if (type < 0) {
             return 35;
         }
-        return 30 + (type - 1) * 22; // Adjusted sizes for better gameplay
+        return 30 + (type - 1) * 22;
     }
+    public int getQueueSize() {
+        return 20 + (type - 1) * 10;
+    }
+
+
+    public void drawAt(Graphics g, double drawX, double drawY, int displaySize) {
+        // Set color based on fruit type or frozen state
+        if (isFrozen()) {
+            g.setColor(new Color(220, 243, 255));
+        } else {
+            g.setColor(getColor());
+        }
+        // Draw the fruit with the specified display size
+        g.fillOval((int) (drawX - displaySize / 2), (int) (drawY - displaySize / 2), displaySize, displaySize);
+
+        // Draw special indicators if needed
+        if (isFrozen()) {
+            g.setColor(Color.BLUE);
+            g.drawString(String.valueOf(freezeStage), (int) drawX - 5, (int) drawY + 5);
+        }
+    }
+
+
+
+
 
     // Getters and setters
     public double getX() { return x; }
