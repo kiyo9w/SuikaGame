@@ -1,7 +1,8 @@
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import java.io.IOException;
 
 public class Fruit {
     private double x, y;
@@ -9,7 +10,8 @@ public class Fruit {
     private static final double GRAVITY = 0.5;
     private int type;
     private int size;
-    private static final Color FREEZE_COLOR = new Color(220, 243, 255);
+    protected BufferedImage image;
+    private static final Color FREEZE_COLOR = new Color(220, 243, 255, 100);
     private boolean frozen = false;
     private boolean hasCollided = false;
     private int freezeStage = 0;
@@ -31,6 +33,7 @@ public class Fruit {
         this.blinkingTimer = 0;
         //random between 100 and 300 frames
         setNextBlinkTime();
+        loadImage();
     }
 
     public void update() {
@@ -57,6 +60,48 @@ public class Fruit {
         }
     }
 
+    private void loadImage() {
+        String imagePath = "";
+        switch (type) {
+            case 1:
+                imagePath = "/resources/strawberry.png";
+                break;
+            case 2:
+                imagePath = "/resources/cherry.png";
+                break;
+            case 3:
+                imagePath = "/resources/orange.png";
+                break;
+            case 4:
+                imagePath = "/resources/peach.png";
+                break;
+            case 5:
+                imagePath = "/resources/apple.png";
+                break;
+            case 6:
+                imagePath = "/resources/yellowmelon.png";
+                break;
+            case 7:
+                imagePath = "/resources/pineapple.png";
+                break;
+            case 8:
+                imagePath = "/resources/suika.png";
+                break;
+        }
+
+        try {
+            image = ImageIO.read(getClass().getResourceAsStream(imagePath));
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Handle the exception or set a default image
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            // Handle the case where the resource is not found
+        }
+    }
+
+
+    // Back-up for when image assets doesnt load, considering removinng later
     private Color getColor() {
         switch (type) {
             case 1:
@@ -100,38 +145,50 @@ public class Fruit {
     public void draw(Graphics g, double drawX, double drawY, int displaySize) {
         //Reduce noise, make fruits more circley
 //        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-        if (isFrozen()) {
-            g.setColor(FREEZE_COLOR);
-        } else {
-            g.setColor(getColor());
-        }
+//        if (isFrozen()) {
+//            g.setColor(FREEZE_COLOR);
+//        } else {
+//            g.setColor(getColor());
+//        }
+//        int drawPosX = (int) (drawX - displaySize / 2);
+//        int drawPosY = (int) (drawY - displaySize / 2);
+//        g.fillOval(drawPosX, drawPosY, displaySize, displaySize);
         int drawPosX = (int) (drawX - displaySize / 2);
         int drawPosY = (int) (drawY - displaySize / 2);
-        g.fillOval(drawPosX, drawPosY, displaySize, displaySize);
-
-        // Draw the face
-        g.setColor(Color.BLACK);
-        int eyeWidth, eyeHeight;
-        if (isBlinking) {
-            eyeWidth = displaySize / 10;
-            eyeHeight = displaySize / 20;
+        if (image != null) {
+            g.drawImage(image, drawPosX, drawPosY, displaySize, displaySize, null);
         } else {
-            eyeWidth = displaySize / 10;
-            eyeHeight = displaySize / 10;
+            // Back-up for when image assets doesnt load, considering removinng later
+            g.setColor(getColor());
+            g.fillOval(drawPosX, drawPosY, displaySize, displaySize);
         }
-        int eyeXOffset = displaySize / 5;
-        int eyeY = drawPosY + displaySize / 3;
-        int leftEyeX = drawPosX + displaySize / 2 - eyeXOffset - eyeWidth / 2;
-        int rightEyeX = drawPosX + displaySize / 2 + eyeXOffset - eyeWidth / 2;
-        g.fillOval(leftEyeX, eyeY, eyeWidth, eyeHeight);
-        g.fillOval(rightEyeX, eyeY, eyeWidth, eyeHeight);
-
-        int mouthWidth = displaySize / 4;
-        int mouthHeight = displaySize / 8;
-        int mouthX = drawPosX + displaySize / 2 - mouthWidth / 2;
-        int mouthY = drawPosY + displaySize / 2 + displaySize / 6;
-        g.drawArc(mouthX, mouthY, mouthWidth, mouthHeight, 0, -180);
+        // If the fruit is frozen, draw an overlay
+        if (frozen) {
+            g.setColor(FREEZE_COLOR); // Semi-transparent overlay
+            g.fillOval(drawPosX, drawPosY, displaySize, displaySize);
+        }
+        // Draw the face
+//        g.setColor(Color.BLACK);
+//        int eyeWidth, eyeHeight;
+//        if (isBlinking) {
+//            eyeWidth = displaySize / 10;
+//            eyeHeight = displaySize / 20;
+//        } else {
+//            eyeWidth = displaySize / 10;
+//            eyeHeight = displaySize / 10;
+//        }
+//        int eyeXOffset = displaySize / 5;
+//        int eyeY = drawPosY + displaySize / 3;
+//        int leftEyeX = drawPosX + displaySize / 2 - eyeXOffset - eyeWidth / 2;
+//        int rightEyeX = drawPosX + displaySize / 2 + eyeXOffset - eyeWidth / 2;
+//        g.fillOval(leftEyeX, eyeY, eyeWidth, eyeHeight);
+//        g.fillOval(rightEyeX, eyeY, eyeWidth, eyeHeight);
+//
+//        int mouthWidth = displaySize / 4;
+//        int mouthHeight = displaySize / 8;
+//        int mouthX = drawPosX + displaySize / 2 - mouthWidth / 2;
+//        int mouthY = drawPosY + displaySize / 2 + displaySize / 6;
+//        g.drawArc(mouthX, mouthY, mouthWidth, mouthHeight, 0, -180);
     }
 
 

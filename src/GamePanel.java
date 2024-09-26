@@ -88,8 +88,10 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
 
 
         // Draw the fruits
-        for (Fruit fruit : fruits) {
-            fruit.draw(g);
+        synchronized (fruits) {
+            for (Fruit fruit : fruits) {
+                fruit.draw(g);
+            }
         }
 
         // Draw the bar
@@ -135,9 +137,14 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
                 fruitQueue.addLast(nextFruit);
 
                 // Decrement freeze stages of all frozen fruits (5)
-                for (Fruit fruit : fruits) {
-                    if (fruit.isFrozen()) {
-                        fruit.decrementFreezeStage();
+                synchronized (fruits) {
+                    for (Fruit fruit : fruits) {
+                        if (fruit.isFrozen()) {
+                            fruit.decrementFreezeStage();
+                        }
+                        if (fruit instanceof BombFruit) {
+                            ((BombFruit) fruit).onFruitDropped();
+                        }
                     }
                 }
                 lastDroppedFruit = newFruit;
@@ -172,7 +179,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
                 // Explode the thingy
                 if (fruit instanceof BombFruit) {
                     BombFruit bombFruit = (BombFruit) fruit;
-                    if (bombFruit.shouldExplode(dropCount)) {
+                    if (bombFruit.shouldExplode()) {
                         bombFruit.explode(fruits, fruitsToRemove);
                         fruitsToRemove.add(bombFruit);
                         continue;
@@ -237,7 +244,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
         Fruit specialFruit;
         switch (specialType) {
             case 0:
-                specialFruit = new BombFruit(xPosition, BAR_Y_POSITION + 20, -1, dropCount);
+                specialFruit = new BombFruit(xPosition, BAR_Y_POSITION + 20, -1);
                 break;
             case 1:
                 specialFruit = new RainbowFruit(xPosition, BAR_Y_POSITION + 20, -2);
@@ -307,7 +314,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
                         f2.setVx(f2.getVx() * 0.95);
                         f2.setVy(f2.getVy() * 0.95);
 
-                        // **Add these lines to mark fruits as having collided**
                         f1.setHasCollided(true);
                         f2.setHasCollided(true);
 
@@ -385,7 +391,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
                 double dist = Math.hypot(dx, dy);
                 double minDist = (fruit.getSize() + mergedFruit.getSize()) / 2.0;
                 if (dist < minDist) {
-                    ((BombFruit) fruit).resetDropCount(dropCount);
+                    ((BombFruit) fruit).resetTurnsLeft();
                 }
             }
         }
