@@ -253,7 +253,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
                 specialFruit = new FreezeFruit(xPosition, BAR_Y_POSITION + 20, -3);
                 break;
             default:
-                specialFruit = new Fruit(xPosition, 100, 3);
+                specialFruit = new Fruit(xPosition, 140, 3);
                 break;
         }
         fruits.add(specialFruit);
