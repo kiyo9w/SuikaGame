@@ -6,8 +6,10 @@ import java.awt.RenderingHints;
 public class Fruit {
     private double x, y;
     private double vx, vy;
+    private static final double GRAVITY = 0.5;
     private int type;
     private int size;
+    private static final Color FREEZE_COLOR = new Color(220, 243, 255);
     private boolean frozen = false;
     private boolean hasCollided = false;
     private int freezeStage = 0;
@@ -16,6 +18,7 @@ public class Fruit {
     private int nextBlinkTime;
     private boolean isBlinking = false;
     private int blinkDuration = 0;
+    private static final int BLINK_DURATION_FRAMES = 5;
 
 
     public Fruit(double x, double y, int type) {
@@ -26,6 +29,7 @@ public class Fruit {
         this.vy = 0;
         this.size = getSizeFromType(type);
         this.blinkingTimer = 0;
+        //random between 100 and 300 frames
         setNextBlinkTime();
     }
 
@@ -34,7 +38,7 @@ public class Fruit {
             return; // Skip movement if frozen
         }
         // Apply gravity
-        vy += 0.5; // Gravity acceleration
+        vy += GRAVITY; // Gravity acceleration
         x += vx;
         y += vy;
 
@@ -42,7 +46,7 @@ public class Fruit {
         if (blinkingTimer >= nextBlinkTime) {
             // Start blinking
             isBlinking = true;
-            blinkDuration = 5; // Blink lasts 5 frames
+            blinkDuration = BLINK_DURATION_FRAMES;
             blinkingTimer = 0;
         }
         if (isBlinking) {
@@ -95,20 +99,19 @@ public class Fruit {
 
     public void draw(Graphics g, double drawX, double drawY, int displaySize) {
         //Reduce noise, make fruits more circley
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+//        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         if (isFrozen()) {
-            g2d.setColor(new Color(220, 243, 255));
+            g.setColor(FREEZE_COLOR);
         } else {
-            g2d.setColor(getColor());
+            g.setColor(getColor());
         }
         int drawPosX = (int) (drawX - displaySize / 2);
         int drawPosY = (int) (drawY - displaySize / 2);
-        g2d.fillOval(drawPosX, drawPosY, displaySize, displaySize);
+        g.fillOval(drawPosX, drawPosY, displaySize, displaySize);
 
         // Draw the face
-        g2d.setColor(Color.BLACK);
+        g.setColor(Color.BLACK);
         int eyeWidth, eyeHeight;
         if (isBlinking) {
             eyeWidth = displaySize / 10;
@@ -121,14 +124,14 @@ public class Fruit {
         int eyeY = drawPosY + displaySize / 3;
         int leftEyeX = drawPosX + displaySize / 2 - eyeXOffset - eyeWidth / 2;
         int rightEyeX = drawPosX + displaySize / 2 + eyeXOffset - eyeWidth / 2;
-        g2d.fillOval(leftEyeX, eyeY, eyeWidth, eyeHeight);
-        g2d.fillOval(rightEyeX, eyeY, eyeWidth, eyeHeight);
+        g.fillOval(leftEyeX, eyeY, eyeWidth, eyeHeight);
+        g.fillOval(rightEyeX, eyeY, eyeWidth, eyeHeight);
 
         int mouthWidth = displaySize / 4;
         int mouthHeight = displaySize / 8;
         int mouthX = drawPosX + displaySize / 2 - mouthWidth / 2;
         int mouthY = drawPosY + displaySize / 2 + displaySize / 6;
-        g2d.drawArc(mouthX, mouthY, mouthWidth, mouthHeight, 0, -180);
+        g.drawArc(mouthX, mouthY, mouthWidth, mouthHeight, 0, -180);
     }
 
 
@@ -185,7 +188,7 @@ public class Fruit {
     }
 
     private void setNextBlinkTime() {
-        // Set the time until the next blink, e.g., between 100 and 300 frames
+        // 100 and 300 frames until the next blink
         nextBlinkTime = blinkingTimer + (int) (Math.random() * 200 + 100);
     }
 
