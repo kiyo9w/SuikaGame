@@ -3,6 +3,8 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.IOException;
+import java.util.List;
+import java.util.Set;
 
 public class Fruit {
     private double x, y;
@@ -13,15 +15,7 @@ public class Fruit {
     protected BufferedImage image;
     private static final Color FREEZE_COLOR = new Color(220, 243, 255, 100);
     private boolean frozen = false;
-    private boolean hasCollided = false;
     private int freezeStage = 0;
-    // Blinking variables
-    private int blinkingTimer;
-    private int nextBlinkTime;
-    private boolean isBlinking = false;
-    private int blinkDuration = 0;
-    private static final int BLINK_DURATION_FRAMES = 5;
-
 
     public Fruit(double x, double y, int type) {
         this.x = x;
@@ -30,9 +24,6 @@ public class Fruit {
         this.vx = 0;
         this.vy = 0;
         this.size = getSizeFromType(type);
-        this.blinkingTimer = 0;
-        //random between 100 and 300 frames
-        setNextBlinkTime();
         loadImage();
     }
 
@@ -44,20 +35,27 @@ public class Fruit {
         vy += GRAVITY; // Gravity acceleration
         x += vx;
         y += vy;
+    }
 
-        blinkingTimer++;
-        if (blinkingTimer >= nextBlinkTime) {
-            // Start blinking
-            isBlinking = true;
-            blinkDuration = BLINK_DURATION_FRAMES;
-            blinkingTimer = 0;
+    public void postUpdate(List<Fruit> allFruits, Set<Fruit> fruitsToRemove) {
+        // Default implementation does nothing, reserve for special fruits
+    }
+
+    public Fruit onCollideWith(Fruit other) {
+        // Default behavior: attempt to merge if possible
+        if (this.canMergeWith(other)) {
+            int newType = this.type + 1;
+            Fruit newFruit = new Fruit(
+                    (this.x + other.x) / 2,
+                    (this.y + other.y) / 2,
+                    newType
+            );
+            newFruit.setVx((this.vx + other.vx) / 2);
+            newFruit.setVy((this.vy + other.vy) / 2);
+            return newFruit;
         }
-        if (isBlinking) {
-            blinkDuration--;
-            if (blinkDuration <= 0) {
-                isBlinking = false;
-            }
-        }
+        // No special action; return null
+        return null;
     }
 
     private void loadImage() {
@@ -247,18 +245,4 @@ public class Fruit {
         }
         return this.getType() == other.getType();
     }
-
-    public boolean hasCollided() {
-        return hasCollided;
-    }
-
-    public void setHasCollided(boolean collided) {
-        this.hasCollided = collided;
-    }
-
-    private void setNextBlinkTime() {
-        // 100 and 300 frames until the next blink
-        nextBlinkTime = blinkingTimer + (int) (Math.random() * 200 + 100);
-    }
-
 }

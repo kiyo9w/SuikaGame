@@ -1,12 +1,17 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 public class FreezeFruit extends Fruit {
+    private int countdown;
+    private static final int COUNTDOWN_DURATION = 100;
 
     public FreezeFruit(double x, double y, int type) {
         super(x, y, type);
+        this.countdown = COUNTDOWN_DURATION;
     }
 
     @Override
@@ -34,11 +39,21 @@ public class FreezeFruit extends Fruit {
             }
         }
         // Sort the list by distance
-        distances.sort((fd1, fd2) -> Double.compare(fd1.distance, fd2.distance));
+        distances.sort(Comparator.comparingDouble(fd -> fd.distance));
         // Freeze up to 5 closest fruits
         int freezeCount = Math.min(5, distances.size());
         for (int i = 0; i < freezeCount; i++) {
             distances.get(i).fruit.freeze();
+        }
+    }
+
+    @Override
+    public void postUpdate(List<Fruit> allFruits, Set<Fruit> fruitsToRemove) {
+        if (countdown > 0) {
+            countdown--;
+        } else {
+            freezeNearbyFruits(allFruits);
+            fruitsToRemove.add(this); // Remove after freezing
         }
     }
 
