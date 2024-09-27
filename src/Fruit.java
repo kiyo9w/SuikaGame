@@ -82,10 +82,22 @@ public class Fruit {
                 imagePath = "/resources/yellowmelon.png";
                 break;
             case 7:
-                imagePath = "/resources/pineapple.png";
+                imagePath = "/resources/grapes.png";
                 break;
             case 8:
+                imagePath = "/resources/pineapple.png";
+                break;
+            case 9:
                 imagePath = "/resources/suika.png";
+                break;
+            case -1:
+                imagePath = "/resources/bomb.png";
+                break;
+            case -2:
+                imagePath = "/resources/rainbow.png";
+                break;
+            case -3:
+                imagePath = "/resources/snowflake.png";
                 break;
         }
 

@@ -9,9 +9,7 @@ public class RainbowFruit extends Fruit {
 
     @Override
     public void draw(Graphics g) {
-        // Draw a rainbow-colored fruit
-        g.setColor(Color.PINK);
-        g.fillOval((int) (getX() - getSize() / 2), (int) (getY() - getSize() / 2), getSize(), getSize());
+        super.draw(g);
         g.setColor(Color.WHITE);
         g.drawString("R", (int) getX() - 5, (int) getY() + 5);
     }

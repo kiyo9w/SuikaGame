@@ -27,6 +27,7 @@ public class BombFruit extends Fruit {
     }
 
     public void onFruitDropped() {
+        System.out.println("bomb count");;
         turnsLeft--;
     }
 

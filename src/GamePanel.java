@@ -12,8 +12,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
     private Timer timer;
     private ArrayList<Fruit> fruits;
     private Random random = new Random();
-//    private int specialFruitTimer = 0; // Counts frames to drop special fruits
-//    private final int SPECIAL_FRUIT_INTERVAL = 3000 / 16; // Approximately every 12 seconds
     private int playerX; // Player's X coordinate (Y coordinate is fixed on the bar)
     private static final int BAR_Y_POSITION = 100; // Position of the bar from the top
     private static final int PLAYER_WIDTH = 50; // Player's width
@@ -23,6 +21,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
     private int dropCount = 0;
     private Fruit lastDroppedFruit = null;
     private static final int DROP_INTERVAL = 8;
+    private long lastDropTime = 0;
 
 
 
@@ -88,10 +87,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
 
 
         // Draw the fruits
-        synchronized (fruits) {
-            for (Fruit fruit : fruits) {
-                fruit.draw(g);
-            }
+        for (Fruit fruit : fruits) {
+            fruit.draw(g);
         }
 
         // Draw the bar
@@ -123,7 +120,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
         } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
             playerX = Math.min(getWidth() - PLAYER_WIDTH, playerX + PLAYER_SPEED);
         } else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-            if (lastDroppedFruit == null || lastDroppedFruit.hasCollided()) {
+            long currentTime = System.currentTimeMillis();
+            if (lastDroppedFruit == null || lastDroppedFruit.hasCollided() || (currentTime - lastDropTime >= 3000)) {
                 Fruit newFruit = fruitQueue.removeFirst();
                 newFruit.setX(playerX + PLAYER_WIDTH / 2);
                 newFruit.setY(BAR_Y_POSITION + 20);
@@ -137,17 +135,17 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
                 fruitQueue.addLast(nextFruit);
 
                 // Decrement freeze stages of all frozen fruits (5)
-                synchronized (fruits) {
-                    for (Fruit fruit : fruits) {
-                        if (fruit.isFrozen()) {
-                            fruit.decrementFreezeStage();
-                        }
-                        if (fruit instanceof BombFruit) {
-                            ((BombFruit) fruit).onFruitDropped();
-                        }
+                for (Fruit fruit : fruits) {
+                    if (fruit.isFrozen()) {
+                        fruit.decrementFreezeStage();
+                    }
+                    if (fruit instanceof BombFruit) {
+                        ((BombFruit) fruit).onFruitDropped();
                     }
                 }
+
                 lastDroppedFruit = newFruit;
+                lastDropTime = currentTime;
 
                 // Check if it's time to drop a special fruit
                 if (dropCount % 8 == 0) {
@@ -200,9 +198,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
                     fruit.setY(getHeight() - fruit.getSize() / 2);
                     fruit.setVy(-fruit.getVy() * 0.8); // Bounce back with damping
                     fruit.setVx(fruit.getVx() * 0.95); // Friction
+                    fruit.setHasCollided(true);// Mark as landed
                     if (Math.abs(fruit.getVy()) < 5) {
                         fruit.setVy(0);
-                        fruit.setHasCollided(true); // Mark as landed
                     }
                     if (Math.abs(fruit.getVx()) < 0.1) {
                         fruit.setVx(0);
@@ -403,7 +401,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (lastDroppedFruit == null || lastDroppedFruit.hasCollided()) {
+        long currentTime = System.currentTimeMillis();
+        if (lastDroppedFruit == null || lastDroppedFruit.hasCollided() || (currentTime - lastDropTime >= 3000)) {
             Fruit newFruit = fruitQueue.removeFirst();
             newFruit.setX(playerX + PLAYER_WIDTH / 2);
             newFruit.setY(BAR_Y_POSITION + 20);
@@ -421,8 +420,12 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
                 if (fruit.isFrozen()) {
                     fruit.decrementFreezeStage();
                 }
+                if (fruit instanceof BombFruit) {
+                    ((BombFruit) fruit).onFruitDropped();
+                }
             }
             lastDroppedFruit = newFruit;
+            lastDropTime = currentTime;
 
             // Check if it's time to drop a special fruit
             if (dropCount % 8 == 0) {
