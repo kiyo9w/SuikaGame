@@ -22,6 +22,7 @@ public class GameFrame extends JFrame {
                     game.update();
                     gamePanel.repaint();
                 } else {
+                    game.endGame();
                     ((Timer) e.getSource()).stop();
                 }
             }

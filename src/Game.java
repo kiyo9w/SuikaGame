@@ -23,6 +23,7 @@ public class Game {
     private static final int PLAYER_WIDTH = 50;
     private static final int BAR_Y_POSITION = 100;
     private static final int DROP_DELAY = 2000;
+    private LeaderBoard leaderboard;
 
     public Game(int width, int height) {
         this.width = width;
@@ -38,6 +39,7 @@ public class Game {
         dropCount = 0;
         lastDroppedFruit = null;
         lastDropTime = 0;
+        leaderboard = new LeaderBoard("scores.txt");
     }
 
     private void initializeFruitQueue() {
@@ -49,7 +51,9 @@ public class Game {
 
     public void update() {
         if (gameOver) {
+           
             return;
+            
         }
 
         Set<Fruit> fruitsToRemove = new HashSet<>();
@@ -159,6 +163,13 @@ public class Game {
     private Fruit createRandomFruit(int x, int y) {
         int fruitType = getRandomFruitType();
         return new Fruit(x, y, fruitType);
+    }
+    public void endGame() {
+        int finalScore = scoreManager.getScore();
+            
+        // Lưu điểm vào bảng xếp hạng
+        leaderboard.addScore(finalScore);
+        leaderboard.displayLeaderboard(10); 
     }
 
     private int getRandomFruitType() {
