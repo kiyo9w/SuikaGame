@@ -2,6 +2,11 @@ import java.util.List;
 import java.util.Set;
 
 public class Collision {
+    private ScoreManager scoreManager;
+
+    public Collision(ScoreManager scoreManager) {
+        this.scoreManager = scoreManager;
+    }
 
     public void handleCollisions(List<Fruit> fruits, Set<Fruit> fruitsToRemove, List<Fruit> fruitsToAdd) {
         for (int i = 0; i < fruits.size(); i++) {
@@ -28,6 +33,12 @@ public class Collision {
                         fruitsToRemove.add(f1);
                         fruitsToRemove.add(f2);
                         fruitsToAdd.add(newFruit);
+
+                        //Gain points based on the new fruit obtained
+                        int level = newFruit.getType();
+                        double popupX = newFruit.getX() ;
+                        double popupY = newFruit.getY() ;
+                        scoreManager.addPoints(level, popupX, popupY);
 
                         break; // Exit inner loop to prevent concurrent modification
                     }

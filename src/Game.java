@@ -18,10 +18,12 @@ public class Game {
     private int height;
     private Random random;
     private Collision collisionManager;
+    private ScoreManager scoreManager;
     private static final int DROP_INTERVAL = 8;
     private static final int PLAYER_WIDTH = 50;
     private static final int BAR_Y_POSITION = 100;
     private static final int DROP_DELAY = 2000;
+    private LeaderBoard leaderboard;
 
     public Game(int width, int height) {
         this.width = width;
@@ -29,13 +31,15 @@ public class Game {
         fruits = new ArrayList<>();
         fruitQueue = new LinkedList<>();
         random = new Random();
-        collisionManager = new Collision(); // Instantiate CollisionManager
+        scoreManager = new ScoreManager();
+        collisionManager = new Collision(scoreManager); // Instantiate CollisionManager
         initializeFruitQueue();
         playerX = width / 2 - PLAYER_WIDTH / 2;
         gameOver = false;
         dropCount = 0;
         lastDroppedFruit = null;
         lastDropTime = 0;
+        leaderboard = new LeaderBoard("scores.txt");
     }
 
     private void initializeFruitQueue() {
@@ -47,7 +51,9 @@ public class Game {
 
     public void update() {
         if (gameOver) {
+           
             return;
+            
         }
 
         Set<Fruit> fruitsToRemove = new HashSet<>();
@@ -96,6 +102,7 @@ public class Game {
 
         fruits.removeAll(fruitsToRemove);
         fruits.addAll(fruitsToAdd);
+        scoreManager.updatePopups();
     }
 
     public void dropFruit() {
@@ -157,6 +164,12 @@ public class Game {
         int fruitType = getRandomFruitType();
         return new Fruit(x, y, fruitType);
     }
+    public void endGame() {
+        int finalScore = scoreManager.getScore();
+            
+        // Lưu điểm vào bảng xếp hạng
+        leaderboard.addScore(finalScore);
+    }
 
     private int getRandomFruitType() {
         int[] types = {1, 2, 3, 4};
@@ -199,5 +212,19 @@ public class Game {
 
     public static int getBarYPosition() {
         return BAR_Y_POSITION;
+    }
+
+    public ScoreManager getScoreManager() {
+        return scoreManager;
+    }
+    public void reset() {
+        fruits.clear();
+        fruitQueue.clear();
+        initializeFruitQueue();
+        gameOver = false;
+        dropCount = 0;
+        lastDroppedFruit = null;
+        lastDropTime = 0;
+        
     }
 }
