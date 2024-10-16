@@ -20,6 +20,7 @@ public class GamePanel extends JPanel {
         addMouseListener(inputHandler);
         addMouseMotionListener(inputHandler);
         setFocusable(true);
+        setOpaque(false);
 
         scoreBoard = new ScoreBoard();
     }
@@ -41,8 +42,8 @@ public class GamePanel extends JPanel {
         int height = getHeight();
 
         // Clear the background
-        g2d.setColor(new Color(247, 242, 200));
-        g2d.fillRect(0, 0, width, height);
+//        g2d.setColor(new Color(247, 242, 200));
+//        g2d.fillRect(0, 0, width, height);
 
         // Draw the fruit queue in a circle
         Queue<Fruit> fruitQueue = game.getFruitQueue();
@@ -76,7 +77,7 @@ public class GamePanel extends JPanel {
             nextFruit.draw(g2d, playerX + Game.getPlayerWidth() / 2, Game.getBarYPosition() + 20, nextFruit.getSize());
         }
 
-        
+
         // Update and draw the scoreboard
         scoreBoard.setScore(game.getScoreManager().getScore());
         scoreBoard.draw(g2d, width);
@@ -89,7 +90,7 @@ public class GamePanel extends JPanel {
             g2d.setColor(popup.getColor());
             g2d.drawString(popup.getText(), (float) popup.getX(), (float) popup.getY());
         }
-        
+
         // Game over screen
         if (game.isGameOver()) {
             g2d.setColor(new Color(0, 0, 0, 150)); // Semi-transparent overlay
@@ -99,18 +100,16 @@ public class GamePanel extends JPanel {
             String gameOverText = "Game Over";
             int textWidth = g2d.getFontMetrics().stringWidth(gameOverText);
             g2d.drawString(gameOverText, (width - textWidth) / 2, height / 2);
-            if (game.isGameOver()) { 
+            if (game.isGameOver()) {
                 g2d.setColor(new Color(0, 0, 0, 150)); // Semi-transparent overlay
                 g2d.fillRect(0, 0, width, height);
                 g2d.setColor(Color.YELLOW);
                 g2d.setFont(new Font("Arial", Font.BOLD, 48));
-                String gameOverText = "Game Over";
-                int textWidth = g2d.getFontMetrics().stringWidth(gameOverText);
                 g2d.drawString(gameOverText, (width - textWidth) / 2, height / 2);
                 g2d.setFont(new Font("Arial", Font.PLAIN, 36));
                 String restartText = "Restart";
                 int restartTextWidth = g2d.getFontMetrics().stringWidth(restartText);
-    
+
                 int buttonX = (width - restartTextWidth) / 2;
                 int buttonY = height / 2 + 50; // Position the button below the game over text
                 int buttonWidth = restartTextWidth + 20;
@@ -124,12 +123,14 @@ public class GamePanel extends JPanel {
                     public void mouseClicked(MouseEvent e) {
                         int mouseX = e.getX();
                         int mouseY = e.getY();
-                        if(mouseX >= buttonX - 10 && mouseX <= buttonX - 10 + buttonWidth &&
-                        mouseY >= buttonY - 30 && mouseY <= buttonY - 30 + buttonHeight) {
-                         reset();       
+                        if (mouseX >= buttonX - 10 && mouseX <= buttonX - 10 + buttonWidth &&
+                                mouseY >= buttonY - 30 && mouseY <= buttonY - 30 + buttonHeight) {
+                            game.reset();
+                        }
+
                     }
-                
+                });
             }
-        });
+        }
     }
 }
