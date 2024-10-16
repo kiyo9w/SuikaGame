@@ -27,6 +27,7 @@ public class BombFruit extends Fruit {
     }
 
     public void onFruitDropped() {
+        System.out.println("bomb count");
         turnsLeft--;
     }
 
@@ -47,6 +48,14 @@ public class BombFruit extends Fruit {
                     fruitsToRemove.add(fruit);
                 }
             }
+        }
+    }
+
+    @Override
+    public void postUpdate(List<Fruit> allFruits, Set<Fruit> fruitsToRemove) {
+        if (shouldExplode()) {
+            explode(allFruits, fruitsToRemove);
+            fruitsToRemove.add(this);
         }
     }
 

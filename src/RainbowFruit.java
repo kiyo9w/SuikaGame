@@ -9,11 +9,26 @@ public class RainbowFruit extends Fruit {
 
     @Override
     public void draw(Graphics g) {
-        // Draw a rainbow-colored fruit
-        g.setColor(Color.PINK);
-        g.fillOval((int) (getX() - getSize() / 2), (int) (getY() - getSize() / 2), getSize(), getSize());
+        super.draw(g);
         g.setColor(Color.WHITE);
         g.drawString("R", (int) getX() - 5, (int) getY() + 5);
+    }
+
+    @Override
+    public Fruit onCollideWith(Fruit other) {
+        if (!(other instanceof BombFruit || other instanceof FreezeFruit || other instanceof RainbowFruit)) {
+            int newType = other.getType() + 1;
+            Fruit newFruit = new Fruit(
+                    (this.getX() + other.getX()) / 2,
+                    (this.getY() + other.getY()) / 2,
+                    newType
+            );
+            newFruit.setVx((this.getVx() + other.getVx()) / 2);
+            newFruit.setVy((this.getVy() + other.getVy()) / 2);
+            return newFruit;
+        }
+        // Cannot merge; return null
+        return null;
     }
 
     @Override
