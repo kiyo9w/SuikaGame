@@ -50,13 +50,4 @@ public class LeaderBoard {
         scores.sort(Collections.reverseOrder());
         return scores.subList(0, Math.min(n, scores.size()));
     }
-
-    // Hiển thị bảng xếp hạng
-    public void displayLeaderboard(int n) {
-        List<Integer> topScores = getTopScores(n);
-        System.out.println("Bảng xếp hạng:");
-        for (int i = 0; i < topScores.size(); i++) {
-            System.out.println((i + 1) + ". " + topScores.get(i));
-        }
-    }
 }

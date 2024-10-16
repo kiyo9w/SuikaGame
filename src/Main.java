@@ -1,9 +1,14 @@
 import javax.swing.SwingUtilities;
+import javax.swing.JOptionPane;
 
 public class Main {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            GameFrame frame = new GameFrame();
+            String playerName = JOptionPane.showInputDialog("Enter your name:");
+            if (playerName == null || playerName.trim().isEmpty()) {
+                playerName = "Player"; // Default name if none entered
+            }
+            GameFrame frame = new GameFrame(playerName);
             frame.setVisible(true);
         });
     }

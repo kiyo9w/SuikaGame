@@ -169,7 +169,6 @@ public class Game {
             
         // Lưu điểm vào bảng xếp hạng
         leaderboard.addScore(finalScore);
-        leaderboard.displayLeaderboard(10); 
     }
 
     private int getRandomFruitType() {
