@@ -217,5 +217,14 @@ public class Game {
     public ScoreManager getScoreManager() {
         return scoreManager;
     }
-
+    public void reset() {
+        fruits.clear();
+        fruitQueue.clear();
+        initializeFruitQueue();
+        gameOver = false;
+        dropCount = 0;
+        lastDroppedFruit = null;
+        lastDropTime = 0;
+        
+    }
 }
