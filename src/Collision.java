@@ -36,10 +36,9 @@ public class Collision {
 
                         //Gain points based on the new fruit obtained
                         int level = newFruit.getType();
-                        double popupX = newFruit.getX() + newFruit.getSize();
-                        double popupY = newFruit.getY();
+                        double popupX = newFruit.getX() ;
+                        double popupY = newFruit.getY() ;
                         scoreManager.addPoints(level, popupX, popupY);
-                        //scoreManager.addPoints(points, newFruit.getX(), newFruit.getY());
 
                         break; // Exit inner loop to prevent concurrent modification
                     }

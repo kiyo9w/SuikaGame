@@ -11,6 +11,7 @@ import java.util.List;
 public class GamePanel extends JPanel {
     private Game game;
     private InputHandler inputHandler;
+    private ScoreBoard scoreBoard;
 
     public GamePanel(Game game) {
         this.game = game;
@@ -19,6 +20,8 @@ public class GamePanel extends JPanel {
         addMouseListener(inputHandler);
         addMouseMotionListener(inputHandler);
         setFocusable(true);
+
+        scoreBoard = new ScoreBoard();
     }
 
     @Override
@@ -73,18 +76,18 @@ public class GamePanel extends JPanel {
             nextFruit.draw(g2d, playerX + Game.getPlayerWidth() / 2, Game.getBarYPosition() + 20, nextFruit.getSize());
         }
 
-        // Draw the scoreboard
-        g2d.setColor(Color.BLACK);
-        g2d.setFont(new Font("Arial", Font.BOLD, 24));
-        String scoreText = "Score: " + game.getScoreManager().getScore();
-        g2d.drawString(scoreText, 10, 30);
+        
+        // Update and draw the scoreboard
+        scoreBoard.setScore(game.getScoreManager().getScore());
+        scoreBoard.draw(g2d, width);
+
 
         // Draw the score popups
         List<ScorePopup> scorePopups = game.getScoreManager().getScorePopups();
         for (ScorePopup popup : scorePopups) {
             g2d.setFont(popup.getFont());
             g2d.setColor(popup.getColor());
-            g2d.drawString(popup.getText(), (float) popup.getX(), (float) popup.getX());
+            g2d.drawString(popup.getText(), (float) popup.getX(), (float) popup.getY());
         }
         
         // Game over screen
