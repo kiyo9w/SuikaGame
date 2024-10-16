@@ -18,6 +18,7 @@ public class Game {
     private int height;
     private Random random;
     private Collision collisionManager;
+    private ScoreManager scoreManager;
     private static final int DROP_INTERVAL = 8;
     private static final int PLAYER_WIDTH = 50;
     private static final int BAR_Y_POSITION = 100;
@@ -29,7 +30,8 @@ public class Game {
         fruits = new ArrayList<>();
         fruitQueue = new LinkedList<>();
         random = new Random();
-        collisionManager = new Collision(); // Instantiate CollisionManager
+        scoreManager = new ScoreManager();
+        collisionManager = new Collision(scoreManager); // Instantiate CollisionManager
         initializeFruitQueue();
         playerX = width / 2 - PLAYER_WIDTH / 2;
         gameOver = false;
@@ -96,6 +98,7 @@ public class Game {
 
         fruits.removeAll(fruitsToRemove);
         fruits.addAll(fruitsToAdd);
+        scoreManager.updatePopups();
     }
 
     public void dropFruit() {
@@ -200,4 +203,9 @@ public class Game {
     public static int getBarYPosition() {
         return BAR_Y_POSITION;
     }
+
+    public ScoreManager getScoreManager() {
+        return scoreManager;
+    }
+
 }

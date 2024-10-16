@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.*;
 import java.util.Queue;
+import java.util.List;
 
 public class GamePanel extends JPanel {
     private Game game;
@@ -72,6 +73,20 @@ public class GamePanel extends JPanel {
             nextFruit.draw(g2d, playerX + Game.getPlayerWidth() / 2, Game.getBarYPosition() + 20, nextFruit.getSize());
         }
 
+        // Draw the scoreboard
+        g2d.setColor(Color.BLACK);
+        g2d.setFont(new Font("Arial", Font.BOLD, 24));
+        String scoreText = "Score: " + game.getScoreManager().getScore();
+        g2d.drawString(scoreText, 10, 30);
+
+        // Draw the score popups
+        List<ScorePopup> scorePopups = game.getScoreManager().getScorePopups();
+        for (ScorePopup popup : scorePopups) {
+            g2d.setFont(popup.getFont());
+            g2d.setColor(popup.getColor());
+            g2d.drawString(popup.getText(), (float) popup.getX(), (float) popup.getX());
+        }
+        
         // Game over screen
         if (game.isGameOver()) {
             g2d.setColor(new Color(0, 0, 0, 150)); // Semi-transparent overlay
