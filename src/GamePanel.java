@@ -50,7 +50,7 @@ public class GamePanel extends JPanel {
         int queueSize = fruitQueue.size();
         int boxSize = 50; // Fixed box size for each fruit
         int startX = width - boxSize / 2 - 10;
-        int startY = boxSize / 2 + 10;
+        int startY = boxSize / 2 + 20;
 
         int i = 0;
         for (Fruit fruit : fruitQueue) {
@@ -77,6 +77,17 @@ public class GamePanel extends JPanel {
             nextFruit.draw(g2d, playerX + Game.getPlayerWidth() / 2, Game.getBarYPosition() + 20, nextFruit.getSize());
         }
 
+        // Draw the gates
+        for (Gate gate : game.getGates()) {
+            gate.draw(g2d);
+        }
+
+        // Draw the danger line
+        int dangerLineY = 280;
+        g2d.setColor(Color.RED);
+        g2d.drawLine(0, dangerLineY, width, dangerLineY);
+        g2d.setFont(new Font("Arial", Font.BOLD, 14));
+        g2d.drawString("Danger Line", 10, dangerLineY - 5); // Label above the line
 
         // Update and draw the scoreboard
         scoreBoard.setScore(game.getScoreManager().getScore());
