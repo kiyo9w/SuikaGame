@@ -42,7 +42,20 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
 
     // Unused methods
     @Override
-    public void mousePressed(MouseEvent e) {}
+    public void mousePressed(MouseEvent e) {
+        if (game.isGameOver()) {
+            int mouseX = e.getX();
+            int mouseY = e.getY();
+            if (mouseX >= restartButtonX && mouseX <= restartButtonX + restartButtonWidth &&
+            mouseY >= restartButtonY && mouseY <= restartButtonY + restartButtonHeight) {
+            game.reset();  // Restart the game
+        }
+        if (mouseX >= returnHomeButtonX && mouseX <= returnHomeButtonX + returnHomeButtonWidth &&
+        mouseY >= returnHomeButtonY && mouseY <= returnHomeButtonY + returnHomeButtonHeight) {
+        game.returnHome();
+        }
+    }
+    }
 
     @Override
     public void mouseReleased(MouseEvent e) {}
@@ -61,4 +74,5 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
 
     @Override
     public void keyTyped(KeyEvent e) {}
+    
 }
