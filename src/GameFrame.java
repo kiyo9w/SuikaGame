@@ -5,7 +5,29 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 public class GameFrame extends JFrame {
+    private MainMenuPanel mainMenuPanel;
+    private JPanel mainPanel;  // Holds the main game layout
+    private JLabel scoreLabel;
     public GameFrame(String playerName) {
+       
+
+        
+        // Initialize main menu panel and add it to frame
+        mainMenuPanel = new MainMenuPanel();
+        add(mainMenuPanel);
+    
+
+        // Listen for Play button click in MainMenuPanel
+        mainMenuPanel.getPlayButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                startGame(playerName);  // Start the game when "Play" is clicked
+            }
+        });
+       
+    }
+    public void  startGame(String playerName){
+        remove(mainMenuPanel);
         setTitle("Suika Game Clone with Physics");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1000, 800);
@@ -120,21 +142,29 @@ public class GameFrame extends JFrame {
         mainPanel.add(centerPanel, BorderLayout.CENTER);
 
         setContentPane(mainPanel);
-
-        Timer timer = new Timer(16, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (!game.isGameOver()) {
-                    game.update();
-                    gamePanel.repaint();
-
-                    scoreLabel.setText("Score: " + game.getScoreManager().getScore());
-                } else {
-                    game.endGame();
-                    ((Timer) e.getSource()).stop();
-                }
-            }
-        });
-        timer.start();
+         repaint();
+ 
+         Timer timer = new Timer(16, new ActionListener() {
+             @Override
+             public void actionPerformed(ActionEvent e) {
+                 if (!game.isGameOver()) {
+                     game.update();
+                     gamePanel.repaint();
+ 
+                     scoreLabel.setText("Score: " + game.getScoreManager().getScore());
+                 } else {
+                     game.endGame();
+                     ((Timer) e.getSource()).stop();
+                 }
+             }
+         });
+         timer.start();
     }
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            GameFrame frame = new GameFrame("PlayerName");
+            frame.setVisible(true);
+        });
+    }
+    
 }
