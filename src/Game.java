@@ -121,8 +121,8 @@ public class Game {
                             fruitsToAdd.add(new RainbowFruit(gateX, gateY, -2));
                             break;
                         case "Double":
-                            fruitsToAdd.add(new Fruit(gateX - 20, gateY, fruit.getType()));
-                            fruitsToAdd.add(new Fruit(gateX + 20, gateY, fruit.getType()));
+                            fruitsToAdd.add(new Fruit(gateX - 20, gateY - 10, fruit.getType()));
+                            fruitsToAdd.add(new Fruit(gateX + 20, gateY + 10, fruit.getType()));
                             break;
                         case "Reduce":
                             if (fruit.getType() > 1) {
@@ -279,8 +279,8 @@ public class Game {
         String gateType = gateTypes[random.nextInt(gateTypes.length)];
     
         // Randomly select a position between the ceiling and the danger line
-        int gateX = random.nextInt(width - 50) + 25; // Avoid spawning at edges
-        int gateY = random.nextInt(DANGER_LINE - BAR_Y_POSITION - 100) + BAR_Y_POSITION + 100;
+        int gateX = random.nextInt(width - 100) + 50; // Avoid spawning at edges
+        int gateY = random.nextInt(DANGER_LINE - BAR_Y_POSITION - 110) + BAR_Y_POSITION + 110;
     
         // Create and add the new gate
         Gate newGate = new Gate(gateX, gateY, gateType, System.currentTimeMillis());

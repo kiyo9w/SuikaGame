@@ -1,5 +1,8 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Image;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
 public class Gate {
     private double x;
@@ -8,6 +11,7 @@ public class Gate {
     private long createTime;
     private boolean active;
     private static final long DURATION = 5000; // Gate lasts for 5 seconds
+    private Image gateImage;
 
     public Gate(double x, double y, String type, long createTime) {
         this.x = x;
@@ -15,6 +19,34 @@ public class Gate {
         this.type = type;
         this.createTime = createTime;
         this.active = true;
+        loadImage();
+    }
+
+    private void loadImage() {
+        try {
+            switch (type) {
+                case "Bomb":
+                    gateImage = ImageIO.read(getClass().getResource("/resources/bomb_gate.png"));
+                    break;
+                case "Freeze":
+                    gateImage = ImageIO.read(getClass().getResource("/resources/freeze_gate.png"));
+                    break;
+                case "Rainbow":
+                    gateImage = ImageIO.read(getClass().getResource("/resources/rainbow_gate.png"));
+                    break;
+                case "Double":
+                    gateImage = ImageIO.read(getClass().getResource("/resources/double_gate.png"));
+                    break;
+                case "Reduce":
+                    gateImage = ImageIO.read(getClass().getResource("/resources/reduce_gate.png"));
+                    break;
+                default:
+                    gateImage = ImageIO.read(getClass().getResource("/resources/default_gate.png"));
+                    break;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean isActive(long currentTime) {
@@ -30,44 +62,24 @@ public class Gate {
         double fruitTop = fruit.getY() - fruit.getSize() / 2;
         double fruitLeft = fruit.getX() - fruit.getSize() / 2;
         double fruitRight = fruit.getX() + fruit.getSize() / 2;
-    
+
         return active &&
                fruitTop < y && fruitBottom > y && // Vertical alignment
-               fruitRight > x - 25 && fruitLeft < x + 25; // Horizontal alignment
+               fruitRight > x - 50 && fruitLeft < x + 50; // Horizontal alignment
     }
-    
+
     public void deactivate() {
         active = false;
     }
 
     public void draw(Graphics g) {
         if (active) {
-            switch (type) {
-                case "Bomb":
-                    g.setColor(Color.RED);
-                    g.drawRect((int) x - 25, (int) y - 10, 50, 20);
-                    g.drawString("B", (int) x - 10, (int) y + 5);
-                    break;
-                case "Freeze":
-                    g.setColor(Color.BLUE);
-                    g.drawRect((int) x - 25, (int) y - 10, 50, 20);
-                    g.drawString("F", (int) x - 10, (int) y + 5);
-                    break;
-                case "Rainbow":
-                    g.setColor(Color.GREEN);
-                    g.drawRect((int) x - 25, (int) y - 10, 50, 20);
-                    g.drawString("R", (int) x - 10, (int) y + 5);
-                    break;
-                case "Double":
-                    g.setColor(Color.ORANGE);
-                    g.drawRect((int) x - 25, (int) y - 10, 50, 20);
-                    g.drawString("D", (int) x - 10, (int) y + 5);
-                    break;
-                case "Reduce":
-                    g.setColor(Color.BLACK);
-                    g.drawRect((int) x - 25, (int) y - 10, 50, 20);
-                    g.drawString("R-", (int) x - 10, (int) y + 5);
-                    break;
+            if (gateImage != null) {
+                g.drawImage(gateImage, (int) x - 50, (int) y - 50, 100, 100, null); // Adjusted size to 100x100 pixels
+            } else {
+                g.setColor(Color.MAGENTA);
+                g.drawRect((int) x - 50, (int) y - 25, 100, 50);
+                g.drawString(type.substring(0, 1), (int) x - 10, (int) y + 5);
             }
         }
     }
