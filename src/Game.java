@@ -9,11 +9,13 @@ import java.util.Set;
 public class Game {
     private List<Fruit> fruits;
     private Queue<Fruit> fruitQueue;
+    private List<Gate> gates;
     private int playerX;
     private boolean gameOver;
     private int dropCount;
     private Fruit lastDroppedFruit;
     private long lastDropTime;
+    private long lastGateTime;
     private int width;
     private int height;
     private Random random;
@@ -23,6 +25,9 @@ public class Game {
     private static final int PLAYER_WIDTH = 50;
     private static final int BAR_Y_POSITION = 100;
     private static final int DROP_DELAY = 2000;
+    private static final int GATE_INTERVAL = 10000;
+    private static final int DANGER_LINE = 280;
+    private boolean specialFruitDropped = false;
     private LeaderBoard leaderboard;
 
     public Game(int width, int height) {
@@ -30,6 +35,7 @@ public class Game {
         this.height = height;
         fruits = new ArrayList<>();
         fruitQueue = new LinkedList<>();
+        gates = new ArrayList<>();
         random = new Random();
         scoreManager = new ScoreManager();
         collisionManager = new Collision(scoreManager); // Instantiate CollisionManager
@@ -39,6 +45,7 @@ public class Game {
         dropCount = 0;
         lastDroppedFruit = null;
         lastDropTime = 0;
+        lastGateTime = 0;
         leaderboard = new LeaderBoard("scores.txt");
     }
 
@@ -59,6 +66,7 @@ public class Game {
         Set<Fruit> fruitsToRemove = new HashSet<>();
         List<Fruit> fruitsToAdd = new ArrayList<>();
 
+        int maxHeight = height;
         for (Fruit fruit : fruits) {
             fruit.update();
             fruit.postUpdate(fruits, fruitsToRemove);
@@ -95,14 +103,92 @@ public class Game {
                 gameOver = true;
                 System.out.println("Fruit has hit the bar.");
             }
-        }
 
+            //Collision with gate
+            for (Gate gate : gates) {
+                if (gate.isFruitThroughGate(fruit) && !(fruit instanceof BombFruit || fruit instanceof FreezeFruit || fruit instanceof RainbowFruit)) {
+                    double gateX = gate.getX();
+                    double gateY = gate.getY();
+            
+                    switch (gate.getType()) {
+                        case "Bomb":
+                            fruitsToAdd.add(new BombFruit(gateX, gateY, -1));
+                            break;
+                        case "Freeze":
+                            fruitsToAdd.add(new FreezeFruit(gateX, gateY, -3));
+                            break;
+                        case "Rainbow":
+                            fruitsToAdd.add(new RainbowFruit(gateX, gateY, -2));
+                            break;
+                        case "Double":
+                            fruitsToAdd.add(new Fruit(gateX - 20, gateY - 10, fruit.getType()));
+                            fruitsToAdd.add(new Fruit(gateX + 20, gateY + 10, fruit.getType()));
+                            break;
+                        case "Reduce":
+                            if (fruit.getType() > 1) {
+                                fruitsToAdd.add(new Fruit(gateX, gateY, fruit.getType() - 1));
+                            } else {
+                                fruitsToAdd.add(new Fruit(gateX, gateY, fruit.getType()));
+                            }
+                            break;
+                    }
+                    fruitsToRemove.add(fruit);
+                    gate.deactivate(); // Deactivate the gate immediately
+                }
+            }            
+            
+        }
+            
         // Handle collisions using CollisionManager
         collisionManager.handleCollisions(fruits, fruitsToRemove, fruitsToAdd);
 
         fruits.removeAll(fruitsToRemove);
         fruits.addAll(fruitsToAdd);
+
+        //Update score popups
         scoreManager.updatePopups();
+
+
+        // Calculate the maximum height of the fruits
+        if (!specialFruitDropped) {
+            maxHeight = height;
+            for (Fruit fruit : fruits) {
+                if (fruit.getVy() == 0) {
+                    boolean onGround = (fruit.getY() + fruit.getSize() / 2 >= height);
+                    boolean onTopOfAnother = false;
+
+                    for (Fruit other : fruits) {
+                        if (other != fruit && Math.abs(fruit.getY() - other.getY()) <= (fruit.getSize() + other.getSize()) / 2) {
+                            onTopOfAnother = true;
+                            break;
+                        }
+                    }   
+
+                    if (onGround || onTopOfAnother) {
+                        int fruitHeight = (int) (fruit.getY() - fruit.getSize() / 2);
+                        if (fruitHeight < maxHeight) {
+                            maxHeight = fruitHeight;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Check if the highest fruit reaches the danger line
+        if (maxHeight > DANGER_LINE) {
+            // Handle gate appearance
+            long currentTime = System.currentTimeMillis();
+            if (currentTime - lastGateTime >= GATE_INTERVAL) {
+                addNewGate();
+                lastGateTime = currentTime;
+            }
+        } else {
+            System.out.println("Warning: Fruit stack has reached the danger line.");
+        }
+
+        // Remove expired gates
+        gates.removeIf(gate -> !gate.isActive(System.currentTimeMillis()));
+
     }
 
     public void dropFruit() {
@@ -158,6 +244,7 @@ public class Game {
                 break;
         }
         fruits.add(specialFruit);
+        specialFruitDropped = true;
     }
 
     private Fruit createRandomFruit(int x, int y) {
@@ -186,6 +273,20 @@ public class Game {
         return types[types.length - 1]; // Fallback
     }
 
+    private void addNewGate() {
+        // Randomly select a gate type
+        String[] gateTypes = {"Bomb", "Freeze", "Rainbow", "Double", "Reduce"};
+        String gateType = gateTypes[random.nextInt(gateTypes.length)];
+    
+        // Randomly select a position between the ceiling and the danger line
+        int gateX = random.nextInt(width - 100) + 50; // Avoid spawning at edges
+        int gateY = random.nextInt(DANGER_LINE - BAR_Y_POSITION - 110) + BAR_Y_POSITION + 110;
+    
+        // Create and add the new gate
+        Gate newGate = new Gate(gateX, gateY, gateType, System.currentTimeMillis());
+        gates.add(newGate);
+    }
+    
     public List<Fruit> getFruits() {
         return fruits;
     }
@@ -217,14 +318,24 @@ public class Game {
     public ScoreManager getScoreManager() {
         return scoreManager;
     }
+
+    public List<Gate> getGates() {
+        return gates;
+    }
+    
     public void reset() {
+        score = 0;
         fruits.clear();
         fruitQueue.clear();
         initializeFruitQueue();
         gameOver = false;
         dropCount = 0;
         lastDroppedFruit = null;
-        lastDropTime = 0;
-        
+        lastDropTime = 0;  
     }
+}
+public void returnHome(){
+    reset();
+   // isHomeScreen = true;
+   gamePanel.repainnt();
 }

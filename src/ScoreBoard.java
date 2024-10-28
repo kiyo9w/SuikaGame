@@ -26,8 +26,8 @@ public class ScoreBoard {
     public void draw(Graphics2D g2d, int width) {
         // Reduce the watermelon image size
         int imageSize = 24;
-        int x = 10;
-        int y = 10;
+        int x = 30;
+        int y = 0;
         if (watermelonImage != null) {
             g2d.drawImage(watermelonImage, x, y, imageSize, imageSize, null);
         }

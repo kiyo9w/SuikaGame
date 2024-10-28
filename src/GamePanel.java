@@ -12,9 +12,11 @@ public class GamePanel extends JPanel {
     private Game game;
     private InputHandler inputHandler;
     private ScoreBoard scoreBoard;
-
+    private int restartButtonX, restartButtonY, restartButtonWidth, restartButtonHeight;
+    private int returnHomeButtonX, returnHomeButtonY, returnHomeButtonWidth, returnHomeButtonHeight;
     public GamePanel(Game game) {
         this.game = game;
+
         inputHandler = new InputHandler(game, this);
         addKeyListener(inputHandler);
         addMouseListener(inputHandler);
@@ -23,6 +25,15 @@ public class GamePanel extends JPanel {
         setOpaque(false);
 
         scoreBoard = new ScoreBoard();
+
+        restartButtonWidth = 150;
+        restartButtonHeight = 50;
+        restartButtonX = getWidth() / 2 - restartButtonWidth / 2;
+        restartButtonY = getHeight() / 2;
+        returnHomeButtonWidth = 200;
+        returnHomeButtonHeight = 50;
+        returnHomeButtonX = getWidth() / 2 - returnHomeButtonWidth / 2;
+        returnHomeButtonY = getHeight() / 2 + restartButtonHeight + 20;
     }
 
     @Override
@@ -50,7 +61,7 @@ public class GamePanel extends JPanel {
         int queueSize = fruitQueue.size();
         int boxSize = 50; // Fixed box size for each fruit
         int startX = width - boxSize / 2 - 10;
-        int startY = boxSize / 2 + 10;
+        int startY = boxSize / 2 + 20;
 
         int i = 0;
         for (Fruit fruit : fruitQueue) {
@@ -77,6 +88,17 @@ public class GamePanel extends JPanel {
             nextFruit.draw(g2d, playerX + Game.getPlayerWidth() / 2, Game.getBarYPosition() + 20, nextFruit.getSize());
         }
 
+        // Draw the gates
+        for (Gate gate : game.getGates()) {
+            gate.draw(g2d);
+        }
+
+        // Draw the danger line
+        int dangerLineY = 280;
+        g2d.setColor(Color.RED);
+        g2d.drawLine(0, dangerLineY, width, dangerLineY);
+        g2d.setFont(new Font("Arial", Font.BOLD, 14));
+        g2d.drawString("Danger Line", 10, dangerLineY - 5); // Label above the line
 
         // Update and draw the scoreboard
         scoreBoard.setScore(game.getScoreManager().getScore());
@@ -92,6 +114,8 @@ public class GamePanel extends JPanel {
         }
 
         // Game over screen
+       
+    
         if (game.isGameOver()) {
             g2d.setColor(new Color(0, 0, 0, 150)); // Semi-transparent overlay
             g2d.fillRect(0, 0, width, height);
@@ -109,7 +133,6 @@ public class GamePanel extends JPanel {
                 g2d.setFont(new Font("Arial", Font.PLAIN, 36));
                 String restartText = "Restart";
                 int restartTextWidth = g2d.getFontMetrics().stringWidth(restartText);
-
                 int buttonX = (width - restartTextWidth) / 2;
                 int buttonY = height / 2 + 50; // Position the button below the game over text
                 int buttonWidth = restartTextWidth + 20;
@@ -118,18 +141,16 @@ public class GamePanel extends JPanel {
                 g2d.fillRect(buttonX - 10, buttonY - 30, buttonWidth, buttonHeight);
                 g2d.setColor(Color.BLACK);
                 g2d.drawString(restartText, buttonX, buttonY);
-                addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        int mouseX = e.getX();
-                        int mouseY = e.getY();
-                        if (mouseX >= buttonX - 10 && mouseX <= buttonX - 10 + buttonWidth &&
-                                mouseY >= buttonY - 30 && mouseY <= buttonY - 30 + buttonHeight) {
-                            game.reset();
-                        }
-
-                    }
-                });
+                int butonWidth = 200;
+                int butonHeight = 50;
+                int butonX = getWidth() / 2 - buttonWidth / 2;
+                int butonY = getHeight() / 2 + 20;
+                g2d.setColor(Color.LIGHT_GRAY);
+                g2d.fillRect(buttonX, buttonY, buttonWidth, buttonHeight);
+                g2d.setColor(Color.BLACK);
+                g2d.setFont(new Font("Arial", Font.PLAIN, 20));
+                g2d.drawString("Return to Home Screen", buttonX + 15, buttonY + 30);
+                
             }
         }
     }

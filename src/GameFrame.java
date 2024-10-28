@@ -5,21 +5,44 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 public class GameFrame extends JFrame {
+    private MainMenuPanel mainMenuPanel;
+    private JPanel mainPanel;  // Holds the main game layout
+    private JLabel scoreLabel;
     public GameFrame(String playerName) {
+       
+
+        
+        // Initialize main menu panel and add it to frame
+        mainMenuPanel = new MainMenuPanel();
+        add(mainMenuPanel);
+    
+
+        // Listen for Play button click in MainMenuPanel
+        mainMenuPanel.getPlayButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                startGame(playerName);  // Start the game when "Play" is clicked
+            }
+        });
+       
+    }
+    public void  startGame(String playerName){
+        remove(mainMenuPanel);
         setTitle("Suika Game Clone with Physics");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1000, 800);
         setLocationRelativeTo(null);
 
         // Load images
+        Image windowBackground = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/resources/window_background.jpeg"));
         Image gameBackground = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/resources/game_background.png"));
         Image leaderboardBg = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/resources/leaderboard.png"));
-        // Removed userBg as we're not using it anymore
 
         // Create the game panel
         Game game = new Game(400, 600); // Game field size is 400x600
         GamePanel gamePanel = new GamePanel(game);
         gamePanel.setPreferredSize(new Dimension(400, 600)); // Set fixed size for the game panel
+        gamePanel.setOpaque(false); // Make the game panel transparent if you want the game background to show
 
         // Wrap the game panel in a BackgroundPanel
         BackgroundPanel gameBackgroundPanel = new BackgroundPanel(gameBackground);
@@ -36,6 +59,7 @@ public class GameFrame extends JFrame {
         // Create center panel with BoxLayout to position game panel at bottom
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
+        centerPanel.setOpaque(false); // Make transparent to show the window background
         centerPanel.add(Box.createVerticalGlue()); // Pushes the game panel to the bottom
         centerPanel.add(gamePanelWrapper);
 
@@ -94,22 +118,23 @@ public class GameFrame extends JFrame {
         JPanel topPanel = new JPanel();
         topPanel.setPreferredSize(new Dimension(getWidth(), 50));
         topPanel.setLayout(null);
-        topPanel.setBackground(new Color(230, 230, 230));
+        topPanel.setOpaque(false); // Make transparent to show the window background
 
         JLabel playerNameLabel = new JLabel("Player: " + playerName);
         playerNameLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        playerNameLabel.setForeground(Color.BLACK); // Adjusted to black for visibility
+        playerNameLabel.setForeground(Color.BLACK);
         playerNameLabel.setBounds(10, 10, 200, 30);
         topPanel.add(playerNameLabel);
 
         JLabel scoreLabel = new JLabel("Score: 0");
         scoreLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        scoreLabel.setForeground(Color.BLACK); // Adjusted to black for visibility
+        scoreLabel.setForeground(Color.BLACK);
         scoreLabel.setBounds(220, 10, 200, 30);
         topPanel.add(scoreLabel);
 
-        // Create main panel with BorderLayout
-        JPanel mainPanel = new JPanel(new BorderLayout());
+        // Create main panel with the window background image
+        BackgroundPanel mainPanel = new BackgroundPanel(windowBackground);
+        mainPanel.setLayout(new BorderLayout());
 
         // Add components to mainPanel
         mainPanel.add(topPanel, BorderLayout.NORTH);
@@ -117,21 +142,29 @@ public class GameFrame extends JFrame {
         mainPanel.add(centerPanel, BorderLayout.CENTER);
 
         setContentPane(mainPanel);
-
-        Timer timer = new Timer(16, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (!game.isGameOver()) {
-                    game.update();
-                    gamePanel.repaint();
-
-                    scoreLabel.setText("Score: " + game.getScoreManager().getScore());
-                } else {
-                    game.endGame();
-                    ((Timer) e.getSource()).stop();
-                }
-            }
-        });
-        timer.start();
+         repaint();
+ 
+         Timer timer = new Timer(16, new ActionListener() {
+             @Override
+             public void actionPerformed(ActionEvent e) {
+                 if (!game.isGameOver()) {
+                     game.update();
+                     gamePanel.repaint();
+ 
+                     scoreLabel.setText("Score: " + game.getScoreManager().getScore());
+                 } else {
+                     game.endGame();
+                     ((Timer) e.getSource()).stop();
+                 }
+             }
+         });
+         timer.start();
     }
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            GameFrame frame = new GameFrame("PlayerName");
+            frame.setVisible(true);
+        });
+    }
+    
 }
