@@ -324,7 +324,6 @@ public class Game {
     }
     
     public void reset() {
-        score = 0;
         fruits.clear();
         fruitQueue.clear();
         initializeFruitQueue();
@@ -333,9 +332,4 @@ public class Game {
         lastDroppedFruit = null;
         lastDropTime = 0;  
     }
-}
-public void returnHome(){
-    reset();
-   // isHomeScreen = true;
-   gamePanel.repainnt();
 }

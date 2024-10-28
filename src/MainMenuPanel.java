@@ -45,10 +45,10 @@ public class MainMenuPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String credits = "Team Members:\n"
-                        + "- Member 1: John Doe\n"
-                        + "- Member 2: Jane Smith\n"
-                        + "- Member 3: Alex Brown\n"
-                        + "- Member 4: Emily White";
+                        + "- Member 1: Ngo Thanh Trung\n"
+                        + "- Member 2: Nguyen Duy Duc\n"
+                        + "- Member 3: Nguyen Duy Khoi\n"
+                        + "- Member 4: Nguyen Quan Huy";
                 
                 JOptionPane.showMessageDialog(null, credits, "Credits", JOptionPane.INFORMATION_MESSAGE);
             }
