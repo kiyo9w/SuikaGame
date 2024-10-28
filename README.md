@@ -19,13 +19,14 @@ We are a group of students collaborating to create a clone of the Suika Game wit
 | Enhance UI elements: set fixed game field size, balance UI components               | Medium | Completed    |
 | Add restart button for game over screen                                             | Low    | Completed    |
 | Implement game over conditions and reset functionality                              | Medium | In Progress  |
-| Develop main interface screen with play and credits buttons                         | Medium | In Progress  |
+| Develop main interface screen with play and credits buttons                         | Medium | Partially    |
 | Game over screen: add return to home screen button                                  | Low    | In Progress  |
-| Implement special drop gate effects (e.g., x2 dropped fruits, rainbow fruits, etc.) | High   | In Progress  |
+| Implement special drop gate effects (e.g., x2 dropped fruits, rainbow fruits, etc.) | High   | Completed    |
+| Add more features to further encapsulate the OOP nature of the project              | Medium | Not Started  |
+| Implement sound effects and background music                                        | Low    | Not Started  |
 | Implement level selection features                                                  | High   | Planned      |
 | Optimize game performance                                                           | Medium | Planned      |
 | Add more special fruits and effects                                                 | Medium | Planned      |
-| Implement sound effects and background music                                        | Low    | Not Started  |
 | Improve graphics and animations                                                     | Medium | Planned      |
 | Add support for shared gameplay features (multiplayer)                              | Medium | Planned      |
 
