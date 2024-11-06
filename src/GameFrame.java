@@ -33,6 +33,8 @@ public class GameFrame extends JFrame {
         setSize(1000, 800);
         setLocationRelativeTo(null);
 
+        
+
         // Load images
         Image windowBackground = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/resources/window_background.jpeg"));
         Image gameBackground = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/resources/game_background.png"));
@@ -43,6 +45,7 @@ public class GameFrame extends JFrame {
         GamePanel gamePanel = new GamePanel(game);
         gamePanel.setPreferredSize(new Dimension(400, 600)); // Set fixed size for the game panel
         gamePanel.setOpaque(false); // Make the game panel transparent if you want the game background to show
+        
 
         // Wrap the game panel in a BackgroundPanel
         BackgroundPanel gameBackgroundPanel = new BackgroundPanel(gameBackground);
@@ -145,20 +148,24 @@ public class GameFrame extends JFrame {
          repaint();
  
          Timer timer = new Timer(16, new ActionListener() {
-             @Override
-             public void actionPerformed(ActionEvent e) {
-                 if (!game.isGameOver()) {
-                     game.update();
-                     gamePanel.repaint();
- 
-                     scoreLabel.setText("Score: " + game.getScoreManager().getScore());
-                 } else {
-                     game.endGame();
-                     ((Timer) e.getSource()).stop();
-                 }
-             }
-         });
-         timer.start();
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!game.isGameOver()) {
+                    game.update();
+                    gamePanel.repaint();
+                    scoreLabel.setText("Score: " + game.getScoreManager().getScore());
+
+                } else {
+                    game.endGame();
+                    dispose();
+                    GameOverFrame gameOverFrame = new GameOverFrame();
+                    gameOverFrame.setVisible(true);
+                    ((Timer) e.getSource()).stop();
+                }
+            }
+        });
+        timer.start();
+         
     }
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {

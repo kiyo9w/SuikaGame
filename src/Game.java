@@ -323,19 +323,5 @@ public class Game {
         return gates;
     }
     
-    public void reset() {
-        score = 0;
-        fruits.clear();
-        fruitQueue.clear();
-        initializeFruitQueue();
-        gameOver = false;
-        dropCount = 0;
-        lastDroppedFruit = null;
-        lastDropTime = 0;  
-    }
-}
-public void returnHome(){
-    reset();
-   // isHomeScreen = true;
-   gamePanel.repainnt();
+    
 }
