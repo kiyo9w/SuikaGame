@@ -8,9 +8,13 @@ public class GameFrame extends JFrame {
     private MainMenuPanel mainMenuPanel;
     private JPanel mainPanel;  // Holds the main game layout
     private JLabel scoreLabel;
+    private Game game;
+    private GamePanel gamePanel;
+    private Timer timer;
+    private String playerName;
 
     public GameFrame(String playerName) {
-
+        this.playerName = playerName;
         setSize(1000, 800);
         setLocationRelativeTo(null); // Center on screen
         setVisible(true);
@@ -19,7 +23,6 @@ public class GameFrame extends JFrame {
         mainMenuPanel = new MainMenuPanel();
         add(mainMenuPanel);
 
-
         // Listen for Play button click in MainMenuPanel
         mainMenuPanel.getPlayButton().addActionListener(new ActionListener() {
             @Override
@@ -27,7 +30,6 @@ public class GameFrame extends JFrame {
                 startGame(playerName);  // Start the game when "Play" is clicked
             }
         });
-
     }
 
     public void startGame(String playerName) {
@@ -43,8 +45,8 @@ public class GameFrame extends JFrame {
         Image leaderboardBg = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/resources/leaderboard.png"));
 
         // Create the game panel
-        Game game = new Game(400, 600); // Game field size is 400x600
-        GamePanel gamePanel = new GamePanel(game);
+        game = new Game(400, 600); // Game field size is 400x600
+        gamePanel = new GamePanel(game);
         gamePanel.setPreferredSize(new Dimension(400, 600)); // Set fixed size for the game panel
         gamePanel.setOpaque(false); // Make the game panel transparent if you want the game background to show
 
@@ -78,7 +80,7 @@ public class GameFrame extends JFrame {
 
         // Create high score label
         JLabel highScoreLabel = new JLabel("High Scores");
-        highScoreLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        highScoreLabel.setFont(new Font("ComicSansMS", Font.BOLD, 16));
         highScoreLabel.setForeground(Color.BLACK);
         highScoreLabel.setHorizontalAlignment(JLabel.CENTER);
         scoresPanel.add(highScoreLabel, BorderLayout.NORTH);
@@ -86,7 +88,7 @@ public class GameFrame extends JFrame {
         // Create the high score area
         JTextArea highScoreArea = new JTextArea();
         highScoreArea.setEditable(false);
-        highScoreArea.setFont(new Font("Arial", Font.PLAIN, 14));
+        highScoreArea.setFont(new Font("ComicSansMS", Font.PLAIN, 14));
         highScoreArea.setOpaque(false);
         highScoreArea.setForeground(Color.BLACK);
 
@@ -125,13 +127,13 @@ public class GameFrame extends JFrame {
         topPanel.setOpaque(false); // Make transparent to show the window background
 
         JLabel playerNameLabel = new JLabel("Player: " + playerName);
-        playerNameLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        playerNameLabel.setFont(new Font("ComicSansMS", Font.BOLD, 16));
         playerNameLabel.setForeground(Color.BLACK);
         playerNameLabel.setBounds(10, 10, 200, 30);
         topPanel.add(playerNameLabel);
 
-        JLabel scoreLabel = new JLabel("Score: 0");
-        scoreLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        scoreLabel = new JLabel("Score: 0");
+        scoreLabel.setFont(new Font("ComicSansMS", Font.BOLD, 16));
         scoreLabel.setForeground(Color.BLACK);
         scoreLabel.setBounds(220, 10, 200, 30);
         topPanel.add(scoreLabel);
@@ -148,17 +150,22 @@ public class GameFrame extends JFrame {
         setContentPane(mainPanel);
         repaint();
 
-        Timer timer = new Timer(16, new ActionListener() {
+        // Initialize the timer
+        timer = new Timer(16, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!game.isGameOver()) {
                     game.update();
                     gamePanel.repaint();
-
                     scoreLabel.setText("Score: " + game.getScoreManager().getScore());
+                    GameOverFrame gameOverFrame = new GameOverFrame();
+                    gameOverFrame.setVisible(true);
                 } else {
                     game.endGame();
-                    ((Timer) e.getSource()).stop();
+                    // Show the GameOverFrame without disposing the GameFrame
+                    GameOverFrame gameOverFrame = new GameOverFrame();
+                    gameOverFrame.setVisible(true);
+                    timer.stop(); // Stop the timer
                 }
             }
         });
@@ -171,5 +178,4 @@ public class GameFrame extends JFrame {
             frame.setVisible(true);
         });
     }
-
 }

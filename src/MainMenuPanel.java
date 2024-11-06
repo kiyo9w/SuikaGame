@@ -73,7 +73,7 @@ public class MainMenuPanel extends JPanel {
         }
         
         // Vẽ tiêu đề
-        g.setFont(new Font("Arial", Font.BOLD, 36));
+        g.setFont(new Font("ComicSansMS", Font.BOLD, 36));
         g.setColor(Color.DARK_GRAY);
         g.drawString("Welcome to Suika Game Clone", 200, 100);
     }
@@ -89,7 +89,7 @@ public class MainMenuPanel extends JPanel {
            
             setOpaque(true); // Đảm bảo màu nền hiển thị
             setFocusPainted(false); // Tắt hiệu ứng khi nút được chọn
-            setFont(new Font("Arial", Font.BOLD, 20)); // Đặt kích thước chữ
+            setFont(new Font("ComicSansMS", Font.BOLD, 20)); // Đặt kích thước chữ
         }
 
         @Override

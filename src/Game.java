@@ -253,7 +253,7 @@ public class Game {
     }
     public void endGame() {
         int finalScore = scoreManager.getScore();
-            
+        // Need to implement: stop everything movement
         // Lưu điểm vào bảng xếp hạng
         leaderboard.addScore(finalScore);
     }
