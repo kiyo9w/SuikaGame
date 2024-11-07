@@ -18,17 +18,20 @@ We are a group of students collaborating to create a clone of the Suika Game wit
 | Implement a leaderboard with file input/output                                      | Medium | Completed    |
 | Enhance UI elements: set fixed game field size, balance UI components               | Medium | Completed    |
 | Add restart button for game over screen                                             | Low    | Completed    |
-| Implement game over conditions and reset functionality                              | Medium | In Progress  |
+| Implement game over conditions and reset functionality                              | Medium | Completed    |
 | Develop main interface screen with play and credits buttons                         | Medium | Partially    |
-| Game over screen: add return to home screen button                                  | Low    | In Progress  |
+| Game over screen: add return to home screen button                                  | Low    | Completed    |
 | Implement special drop gate effects (e.g., x2 dropped fruits, rainbow fruits, etc.) | High   | Completed    |
-| Add more features to further encapsulate the OOP nature of the project              | Medium | Not Started  |
+| Implement different fruit shape (oval for fruit like mango or long strip like banana| High   | In progress  |
+| Implement combo system when stacking multiple merges in one drop                    | Low    | In progress  |
+| Add an achivement system                                                            | Low    | Not Started  |
+| Make specials feature toggleable (can be turned on or off)                          | Low    | Not Started  |
 | Implement sound effects and background music                                        | Low    | Not Started  |
 | Implement level selection features                                                  | High   | Planned      |
 | Optimize game performance                                                           | Medium | Planned      |
 | Add more special fruits and effects                                                 | Medium | Planned      |
 | Improve graphics and animations                                                     | Medium | Planned      |
-| Add support for shared gameplay features (multiplayer)                              | Medium | Planned      |
+| Add support for shared gameplay features (multiplayer / online)                     | E.High | Planned      |
 
 ---
 
