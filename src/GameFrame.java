@@ -21,7 +21,7 @@ public class GameFrame extends JFrame {
 
         // Initialize main menu panel and add it to frame
         mainMenuPanel = new MainMenuPanel();
-        add(mainMenuPanel);
+        setContentPane(mainMenuPanel);
 
         // Listen for Play button click in MainMenuPanel
         mainMenuPanel.getPlayButton().addActionListener(new ActionListener() {
@@ -33,11 +33,11 @@ public class GameFrame extends JFrame {
     }
 
     public void startGame(String playerName) {
-        remove(mainMenuPanel);
-        setTitle("Suika Game Clone with Physics");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1000, 800);
-        setLocationRelativeTo(null);
+//        remove(mainMenuPanel);
+//        setTitle("Suika Game Clone with Physics");
+//        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        setSize(1000, 800);
+//        setLocationRelativeTo(null);
 
         // Load images
         Image windowBackground = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/resources/window_background.jpeg"));
@@ -148,6 +148,7 @@ public class GameFrame extends JFrame {
         mainPanel.add(centerPanel, BorderLayout.CENTER);
 
         setContentPane(mainPanel);
+        revalidate();
         repaint();
 
         // Initialize the timer
