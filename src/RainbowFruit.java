@@ -1,7 +1,9 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.List;
+import java.util.Set;
 
-public class RainbowFruit extends Fruit {
+public class RainbowFruit extends SpecialFruit {
 
     public RainbowFruit(double x, double y, int type) {
         super(x, y, type); // Base type
@@ -34,6 +36,11 @@ public class RainbowFruit extends Fruit {
     @Override
     public boolean canMergeWith(Fruit other) {
         // Can merge with any fruit except special fruits
-        return !(other instanceof BombFruit || other instanceof FreezeFruit || other instanceof RainbowFruit);
+        return !(other instanceof SpecialFruit);
+    }
+
+    @Override
+    public void postUpdate(List<Fruit> allFruits, Set<Fruit> fruitsToRemove) {
+        // RainbowFruit has no post-update action
     }
 }

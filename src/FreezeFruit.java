@@ -5,7 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
-public class FreezeFruit extends Fruit {
+public class FreezeFruit extends SpecialFruit {
     private int countdown;
     private static final int COUNTDOWN_DURATION = 100;
 
@@ -55,12 +55,6 @@ public class FreezeFruit extends Fruit {
             freezeNearbyFruits(allFruits);
             fruitsToRemove.add(this); // Remove after freezing
         }
-    }
-
-    @Override
-    public boolean canMergeWith(Fruit other) {
-        // FreezeFruit cannot merge
-        return false;
     }
 
     // Helper class to store fruits and their distances

@@ -3,7 +3,7 @@ import java.awt.Graphics;
 import java.util.List;
 import java.util.Set;
 
-public class BombFruit extends Fruit {
+public class BombFruit extends SpecialFruit {
     private int turnsLeft;
     private static final int EXPLOSION_TURNS = 8; // Total turns before explosion
 
@@ -11,13 +11,12 @@ public class BombFruit extends Fruit {
         super(x, y, type);
         this.turnsLeft = EXPLOSION_TURNS;
     }
-
+/* 
     @Override
     public void update() {
         super.update();
-        // No additional update logic needed
     }
-
+*/
     @Override
     public void draw(Graphics g) {
         super.draw(g);
@@ -59,9 +58,4 @@ public class BombFruit extends Fruit {
         }
     }
 
-    @Override
-    public boolean canMergeWith(Fruit other) {
-        // Bomb cannot merge
-        return false;
-    }
 }

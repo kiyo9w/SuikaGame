@@ -228,7 +228,7 @@ public class Game {
         // Randomly select a special fruit to drop
         int specialType = random.nextInt(3); // 0: Bomb, 1: Rainbow, 2: Freeze
         int xPosition = random.nextInt(width - 50) + 25; // Avoid spawning at edges
-        Fruit specialFruit;
+        SpecialFruit specialFruit;
         switch (specialType) {
             case 0:
                 specialFruit = new BombFruit(xPosition, BAR_Y_POSITION + 20, -1);
@@ -240,8 +240,7 @@ public class Game {
                 specialFruit = new FreezeFruit(xPosition, BAR_Y_POSITION + 20, -3);
                 break;
             default:
-                specialFruit = new Fruit(xPosition, 100, 3);
-                break;
+                return;
         }
         fruits.add(specialFruit);
         specialFruitDropped = true;
