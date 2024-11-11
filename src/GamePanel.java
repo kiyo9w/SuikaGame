@@ -88,7 +88,7 @@ public class GamePanel extends JPanel {
         int dangerLineY = 280;
         g2d.setColor(Color.RED);
         g2d.drawLine(0, dangerLineY, width, dangerLineY);
-        g2d.setFont(new Font("ComicSansMS", Font.BOLD, 14));
+        g2d.setFont(new Font("Comic Sans MS", Font.BOLD, 14));
         g2d.drawString("Danger Line", 10, dangerLineY - 5); // Label above the line
 
         // Update and draw the scoreboard
@@ -111,11 +111,11 @@ public class GamePanel extends JPanel {
             g2d.setColor(new Color(0, 0, 0, 150)); // Semi-transparent overlay
             g2d.fillRect(0, 0, width, height);
             g2d.setColor(Color.YELLOW);
-            g2d.setFont(new Font("ComicSansMS", Font.BOLD, 48));
+            g2d.setFont(new Font("Comic Sans MS", Font.BOLD, 48));
             String gameOverText = "Game Over";
             int textWidth = g2d.getFontMetrics().stringWidth(gameOverText);
             g2d.drawString(gameOverText, (width - textWidth) / 2, height / 2);
-            g2d.setFont(new Font("ComicSansMS", Font.PLAIN, 36));
+            g2d.setFont(new Font("Comic Sans MS", Font.PLAIN, 36));
             
                 
             }
