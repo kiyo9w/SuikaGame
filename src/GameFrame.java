@@ -21,7 +21,7 @@ public class GameFrame extends JFrame {
 
         // Initialize main menu panel and add it to frame
         mainMenuPanel = new MainMenuPanel();
-        add(mainMenuPanel);
+        setContentPane(mainMenuPanel);
 
         // Listen for Play button click in MainMenuPanel
         mainMenuPanel.getPlayButton().addActionListener(new ActionListener() {
@@ -33,11 +33,11 @@ public class GameFrame extends JFrame {
     }
 
     public void startGame(String playerName) {
-        remove(mainMenuPanel);
-        setTitle("Suika Game Clone with Physics");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1000, 800);
-        setLocationRelativeTo(null);
+//        remove(mainMenuPanel);
+//        setTitle("Suika Game Clone with Physics");
+//        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        setSize(1000, 800);
+//        setLocationRelativeTo(null);
 
         // Load images
         Image windowBackground = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/resources/window_background.jpeg"));
@@ -80,7 +80,7 @@ public class GameFrame extends JFrame {
 
         // Create high score label
         JLabel highScoreLabel = new JLabel("High Scores");
-        highScoreLabel.setFont(new Font("ComicSansMS", Font.BOLD, 16));
+        highScoreLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 16));
         highScoreLabel.setForeground(Color.BLACK);
         highScoreLabel.setHorizontalAlignment(JLabel.CENTER);
         scoresPanel.add(highScoreLabel, BorderLayout.NORTH);
@@ -88,7 +88,7 @@ public class GameFrame extends JFrame {
         // Create the high score area
         JTextArea highScoreArea = new JTextArea();
         highScoreArea.setEditable(false);
-        highScoreArea.setFont(new Font("ComicSansMS", Font.PLAIN, 14));
+        highScoreArea.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
         highScoreArea.setOpaque(false);
         highScoreArea.setForeground(Color.BLACK);
 
@@ -127,13 +127,13 @@ public class GameFrame extends JFrame {
         topPanel.setOpaque(false); // Make transparent to show the window background
 
         JLabel playerNameLabel = new JLabel("Player: " + playerName);
-        playerNameLabel.setFont(new Font("ComicSansMS", Font.BOLD, 16));
+        playerNameLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 16));
         playerNameLabel.setForeground(Color.BLACK);
         playerNameLabel.setBounds(10, 10, 200, 30);
         topPanel.add(playerNameLabel);
 
         scoreLabel = new JLabel("Score: 0");
-        scoreLabel.setFont(new Font("ComicSansMS", Font.BOLD, 16));
+        scoreLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 16));
         scoreLabel.setForeground(Color.BLACK);
         scoreLabel.setBounds(220, 10, 200, 30);
         topPanel.add(scoreLabel);
@@ -148,6 +148,7 @@ public class GameFrame extends JFrame {
         mainPanel.add(centerPanel, BorderLayout.CENTER);
 
         setContentPane(mainPanel);
+        revalidate();
         repaint();
 
         // Initialize the timer
@@ -158,8 +159,8 @@ public class GameFrame extends JFrame {
                     game.update();
                     gamePanel.repaint();
                     scoreLabel.setText("Score: " + game.getScoreManager().getScore());
-                    GameOverFrame gameOverFrame = new GameOverFrame();
-                    gameOverFrame.setVisible(true);
+                    // GameOverFrame gameOverFrame = new GameOverFrame();
+                    // gameOverFrame.setVisible(true);
                 } else {
                     game.endGame();
                     // Show the GameOverFrame without disposing the GameFrame

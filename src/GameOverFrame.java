@@ -35,7 +35,7 @@ public class GameOverFrame extends JDialog {
         );
 
         JLabel gameOverLabel = new JLabel("Game Over", SwingConstants.CENTER);
-        gameOverLabel.setFont(new Font("ComicSansMS", Font.BOLD, 48));
+        gameOverLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 48));
         gameOverLabel.setForeground(new Color(255, 0, 102));
         boxPanel.add(gameOverLabel, BorderLayout.NORTH);
         
@@ -44,14 +44,14 @@ public class GameOverFrame extends JDialog {
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
 
         RoundedButton retryButton = new RoundedButton("Retry", 20);
-        retryButton.setFont(new Font("ComicSansMS", Font.BOLD, 24));
+        retryButton.setFont(new Font("Comic Sans MS", Font.BOLD, 24));
         retryButton.setBackground(new Color(255, 165, 0)); 
         retryButton.setForeground(Color.WHITE);  
         retryButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         retryButton.setPreferredSize(new Dimension(200, 60));
 
         RoundedButton quitButton = new RoundedButton("Quit Game", 20);
-        quitButton.setFont(new Font("ComicSansMS", Font.BOLD, 20));
+        quitButton.setFont(new Font("Comic Sans MS", Font.BOLD, 20));
         quitButton.setBackground(new Color(255, 165, 0)); 
         quitButton.setForeground(Color.LIGHT_GRAY); 
         quitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
