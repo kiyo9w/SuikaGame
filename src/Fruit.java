@@ -1,10 +1,10 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
+import javax.imageio.ImageIO;
 
 public class Fruit {
     private double x, y;
@@ -16,11 +16,13 @@ public class Fruit {
     private static final Color FREEZE_COLOR = new Color(220, 243, 255, 100);
     private boolean frozen = false;
     private int freezeStage = 0;
+    private Game game;
 
-    public Fruit(double x, double y, int type) {
+    public Fruit(double x, double y, int type,Game game) {
         this.x = x;
         this.y = y;
         this.type = type;
+        this.game = game;
         this.vx = 0;
         this.vy = 0;
         this.size = getSizeFromType(type);
@@ -41,22 +43,25 @@ public class Fruit {
         // Default implementation does nothing, reserve for special fruits
     }
 
+
     public Fruit onCollideWith(Fruit other) {
         // Default behavior: attempt to merge if possible
         if (this.canMergeWith(other)) {
             int newType = this.type + 1;
+            int level=game.calculateLevelFromScore(game.getScore());
             Fruit newFruit = new Fruit(
                     (this.x + other.x) / 2,
                     (this.y + other.y) / 2,
-                    newType
+                    newType,
+                    game
             );
             newFruit.setVx((this.vx + other.vx) / 2);
             newFruit.setVy((this.vy + other.vy) / 2);
             return newFruit;
         }
-        // No special action; return null
         return null;
     }
+    
 
     private void loadImage() {
         String imagePath = "";
@@ -112,7 +117,7 @@ public class Fruit {
 
 
     // Back-up for when image assets doesnt load, considering removinng later
-    private Color getColor() {
+    public Color getColor() {
         switch (type) {
             case 1:
                 return new Color(243, 34, 35); // Level 1 fruit

@@ -51,11 +51,32 @@ public class Game {
 
     private void initializeFruitQueue() {
         for (int i = 0; i < DROP_INTERVAL; i++) {
-            Fruit fruit = createRandomFruit(0, 0);
-            fruitQueue.add(fruit);
+            int initialLevel = random.nextInt(2) + 1; // Cấp độ 1 hoặc 2 cho trái cây ban đầu
+            int x = (int) (random.nextDouble() * width);
+            int y = 0;
+            List<Fruit> newFruits = createRandomFruit(x, y, initialLevel);
+            for (Fruit fruit : newFruits) {
+                fruitQueue.add(fruit);
+            }
         }
+        
     }
+    public int getScore() {
+        return scoreManager.getScore();
+    }
+    public int calculateLevelFromScore(int score) {
+        
+        if(score>20){
+            return 5;
+        } else if(score>30){
+            return 7;
+        } else if(score>50){
+            return 8;
+        }
 
+        return 0;
+    }
+    
     public void update() {
         if (gameOver) {
            
@@ -112,23 +133,23 @@ public class Game {
             
                     switch (gate.getType()) {
                         case "Bomb":
-                            fruitsToAdd.add(new BombFruit(gateX, gateY, -1));
+                            fruitsToAdd.add(new BombFruit(gateX, gateY, -1,this));
                             break;
                         case "Freeze":
-                            fruitsToAdd.add(new FreezeFruit(gateX, gateY, -3));
+                            fruitsToAdd.add(new FreezeFruit(gateX, gateY, -3,this));
                             break;
                         case "Rainbow":
-                            fruitsToAdd.add(new RainbowFruit(gateX, gateY, -2));
+                            fruitsToAdd.add(new RainbowFruit(gateX, gateY, -2,this));
                             break;
                         case "Double":
-                            fruitsToAdd.add(new Fruit(gateX - 20, gateY - 10, fruit.getType()));
-                            fruitsToAdd.add(new Fruit(gateX + 20, gateY + 10, fruit.getType()));
+                            fruitsToAdd.add(new Fruit(gateX - 20, gateY - 10, fruit.getType(),this));
+                            fruitsToAdd.add(new Fruit(gateX + 20, gateY + 10, fruit.getType(),this));
                             break;
                         case "Reduce":
                             if (fruit.getType() > 1) {
-                                fruitsToAdd.add(new Fruit(gateX, gateY, fruit.getType() - 1));
+                                fruitsToAdd.add(new Fruit(gateX, gateY, fruit.getType() - 1,this));
                             } else {
-                                fruitsToAdd.add(new Fruit(gateX, gateY, fruit.getType()));
+                                fruitsToAdd.add(new Fruit(gateX, gateY, fruit.getType(),this));
                             }
                             break;
                     }
@@ -190,7 +211,7 @@ public class Game {
         gates.removeIf(gate -> !gate.isActive(System.currentTimeMillis()));
 
     }
-
+    
     public void dropFruit() {
         long currentTime = System.currentTimeMillis();
         if (lastDroppedFruit == null || (currentTime - lastDropTime >= DROP_DELAY)) {
@@ -200,9 +221,14 @@ public class Game {
                 newFruit.setY(BAR_Y_POSITION + 20);
                 fruits.add(newFruit);
                 dropCount++;
-                // Generate a new fruit and add it to the end of the queue
-                fruitQueue.add(createRandomFruit(0, 0));
+                int score=this.getScore();
+                int level=calculateLevelFromScore(score);
+                List<Fruit> newFruits = createRandomFruit(0, 0, level);
 
+            // Tạo trái cây mới với cấp độ (level) đã tính toán và thêm vào hàng đợi
+            for (Fruit fruit : newFruits) {
+                fruitQueue.add(fruit);
+            }
                 // Decrement freeze stages of all frozen fruits
                 for (Fruit fruit : fruits) {
                     if (fruit.isFrozen()) {
@@ -231,13 +257,13 @@ public class Game {
         SpecialFruit specialFruit;
         switch (specialType) {
             case 0:
-                specialFruit = new BombFruit(xPosition, BAR_Y_POSITION + 20, -1);
+                specialFruit = new BombFruit(xPosition, BAR_Y_POSITION + 20, -1,this);
                 break;
             case 1:
-                specialFruit = new RainbowFruit(xPosition, BAR_Y_POSITION + 20, -2);
+                specialFruit = new RainbowFruit(xPosition, BAR_Y_POSITION + 20, -2,this);
                 break;
             case 2:
-                specialFruit = new FreezeFruit(xPosition, BAR_Y_POSITION + 20, -3);
+                specialFruit = new FreezeFruit(xPosition, BAR_Y_POSITION + 20, -3,this);
                 break;
             default:
                 return;
@@ -246,10 +272,43 @@ public class Game {
         specialFruitDropped = true;
     }
 
-    private Fruit createRandomFruit(int x, int y) {
-        int fruitType = getRandomFruitType();
-        return new Fruit(x, y, fruitType);
+    
+    
+    public List<Fruit> createRandomFruit(int x, int y, int level) {
+        List<Fruit> fruits = new ArrayList<>(); // Danh sách để chứa các đối tượng Fruit
+    
+        switch (level) {
+            case 5:
+                // Tạo một OvalFruit và thêm vào danh sách
+                fruits.add(new OvalFruit(x, y, level, this));
+    
+                // Gọi logic của default để tạo một Fruit bình thường và thêm vào danh sách
+                int fruitType = getRandomFruitType();
+                fruits.add(new Fruit(x, y, fruitType, this));
+                break;
+    
+            case 7:
+                // Tạo một BananaFruit và thêm vào danh sách
+                fruits.add(new BananaFruit(x, y, level, this));
+                fruitType = getRandomFruitType();
+                fruits.add(new Fruit(x, y, fruitType, this));
+                break;
+                case 8:
+                fruits.add(new CircleFruit(x, y, level, this));
+                fruitType = getRandomFruitType();
+                fruits.add(new Fruit(x, y, fruitType, this));
+                break;
+    
+            default:
+                // Tạo một Fruit bình thường và thêm vào danh sách
+                fruitType = getRandomFruitType();
+                fruits.add(new Fruit(x, y, fruitType, this));
+                break;
+        }
+    
+        return fruits;
     }
+    
     public void endGame() {
         int finalScore = scoreManager.getScore();
         // Need to implement: stop everything movement

@@ -3,8 +3,8 @@ import java.util.Set;
 
 public abstract class SpecialFruit extends Fruit {
 
-    public SpecialFruit(double x, double y, int type) {
-        super(x, y, type);
+    public SpecialFruit(double x, double y, int type,Game game) {
+        super(x, y, type,game);
     }
 
     // Abstract method to be implemented by all special fruits

@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.Set;
 
 public class RainbowFruit extends SpecialFruit {
-
-    public RainbowFruit(double x, double y, int type) {
-        super(x, y, type); // Base type
+    private Game game;
+    public RainbowFruit(double x, double y, int type,Game game) {
+        super(x, y, type,game); // Base type
     }
 
     @Override
@@ -23,7 +23,8 @@ public class RainbowFruit extends SpecialFruit {
             Fruit newFruit = new Fruit(
                     (this.getX() + other.getX()) / 2,
                     (this.getY() + other.getY()) / 2,
-                    newType
+                    newType,
+                    this.game
             );
             newFruit.setVx((this.getVx() + other.getVx()) / 2);
             newFruit.setVy((this.getVy() + other.getVy()) / 2);

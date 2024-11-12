@@ -7,8 +7,8 @@ public class BombFruit extends SpecialFruit {
     private int turnsLeft;
     private static final int EXPLOSION_TURNS = 8; // Total turns before explosion
 
-    public BombFruit(double x, double y, int type) {
-        super(x, y, type);
+    public BombFruit(double x, double y, int type,Game game) {
+        super(x, y, type,game);
         this.turnsLeft = EXPLOSION_TURNS;
     }
 /* 

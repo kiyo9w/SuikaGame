@@ -9,8 +9,8 @@ public class FreezeFruit extends SpecialFruit {
     private int countdown;
     private static final int COUNTDOWN_DURATION = 100;
 
-    public FreezeFruit(double x, double y, int type) {
-        super(x, y, type);
+    public FreezeFruit(double x, double y, int type,Game game) {
+        super(x, y, type,game);
         this.countdown = COUNTDOWN_DURATION;
     }
 
