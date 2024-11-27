@@ -79,69 +79,13 @@ public class Game {
             fruit.postUpdate(fruits, fruitsToRemove);
 
             // Collision with walls
-            if (fruit.getX() - fruit.getSize() / 2 <= 0) {
-                fruit.setX(fruit.getSize() / 2);
-                fruit.setVx(-fruit.getVx() * 0.8); // Bounce back with damping
-            } else if (fruit.getX() + fruit.getSize() / 2 >= width) {
-                fruit.setX(width - fruit.getSize() / 2);
-                fruit.setVx(-fruit.getVx() * 0.8);
-            }
+            handleWallCollisions(fruit);
 
-            // Collision with ground
-            if (fruit.getY() + fruit.getSize() / 2 >= height) {
-                fruit.setY(height - fruit.getSize() / 2); // Dont know what bug caused ground to be eaten but gonna fix later :D
-                fruit.setVy(-fruit.getVy() * 0.8);
-                fruit.setVx(fruit.getVx() * 0.95);
-                if (Math.abs(fruit.getVy()) < 10) {
-                    fruit.setVy(0);
-                }
-                if (Math.abs(fruit.getVx()) < 0.1) {
-                    fruit.setVx(0);
-                }
-            }
-
-            // Collision with ceiling
-            if (fruit.getY() - fruit.getSize() / 2 <= 0) {
-                fruit.setY(fruit.getSize() / 2);
-                fruit.setVy(-fruit.getVy() * 0.8);
-            }
-
-            if (fruit.getY() <= BAR_Y_POSITION) {
-                gameOver = true;
-            }
+            // Collision with ground & ceiling
+            handleGroundAndCeilingCollisions(fruit);
 
             //Collision with gate
-            for (Gate gate : gates) {
-                if (gate.isFruitThroughGate(fruit) && !(fruit instanceof BombFruit || fruit instanceof FreezeFruit || fruit instanceof RainbowFruit)) {
-                    double gateX = gate.getX();
-                    double gateY = gate.getY();
-            
-                    switch (gate.getType()) {
-                        case "Bomb":
-                            fruitsToAdd.add(new BombFruit(gateX, gateY, -1));
-                            break;
-                        case "Freeze":
-                            fruitsToAdd.add(new FreezeFruit(gateX, gateY, -3));
-                            break;
-                        case "Rainbow":
-                            fruitsToAdd.add(new RainbowFruit(gateX, gateY, -2));
-                            break;
-                        case "Double":
-                            fruitsToAdd.add(new Fruit(gateX - 20, gateY - 10, fruit.getType()));
-                            fruitsToAdd.add(new Fruit(gateX + 20, gateY + 10, fruit.getType()));
-                            break;
-                        case "Reduce":
-                            if (fruit.getType() > 1) {
-                                fruitsToAdd.add(new Fruit(gateX, gateY, fruit.getType() - 1));
-                            } else {
-                                fruitsToAdd.add(new Fruit(gateX, gateY, fruit.getType()));
-                            }
-                            break;
-                    }
-                    fruitsToRemove.add(fruit);
-                    gate.deactivate(); // Deactivate the gate immediately
-                }
-            }            
+            handleGateCollision(fruitsToRemove, fruitsToAdd, fruit);            
             
         }
             
@@ -156,6 +100,79 @@ public class Game {
 
 
         // Calculate the maximum height of the fruits
+        handleDangerLineLogic(maxHeight);
+
+    }
+
+    private void handleGateCollision(Set<Fruit> fruitsToRemove, List<Fruit> fruitsToAdd, Fruit fruit) {
+        for (Gate gate : gates) {
+            if (gate.isFruitThroughGate(fruit) && !(fruit instanceof BombFruit || fruit instanceof FreezeFruit || fruit instanceof RainbowFruit)) {
+                double gateX = gate.getX();
+                double gateY = gate.getY();
+        
+                switch (gate.getType()) {
+                    case "Bomb":
+                        fruitsToAdd.add(new BombFruit(gateX, gateY, -1));
+                        break;
+                    case "Freeze":
+                        fruitsToAdd.add(new FreezeFruit(gateX, gateY, -3));
+                        break;
+                    case "Rainbow":
+                        fruitsToAdd.add(new RainbowFruit(gateX, gateY, -2));
+                        break;
+                    case "Double":
+                        fruitsToAdd.add(new Fruit(gateX - 20, gateY - 10, fruit.getType()));
+                        fruitsToAdd.add(new Fruit(gateX + 20, gateY + 10, fruit.getType()));
+                        break;
+                    case "Reduce":
+                        if (fruit.getType() > 1) {
+                            fruitsToAdd.add(new Fruit(gateX, gateY, fruit.getType() - 1));
+                        } else {
+                            fruitsToAdd.add(new Fruit(gateX, gateY, fruit.getType()));
+                        }
+                        break;
+                }
+                fruitsToRemove.add(fruit);
+                gate.deactivate(); // Deactivate the gate immediately
+            }
+        }
+    }
+
+    private void handleGroundAndCeilingCollisions(Fruit fruit) {
+        if (fruit.getY() + fruit.getSize() / 2 >= height) {
+            fruit.setY(height - fruit.getSize() / 2); // Dont know what bug caused ground to be eaten but gonna fix later :D
+            fruit.setVy(-fruit.getVy() * 0.8);
+            fruit.setVx(fruit.getVx() * 0.95);
+            if (Math.abs(fruit.getVy()) < 10) {
+                fruit.setVy(0);
+            }
+            if (Math.abs(fruit.getVx()) < 0.1) {
+                fruit.setVx(0);
+            }
+        }
+
+        // Collision with ceiling
+        if (fruit.getY() - fruit.getSize() / 2 <= 0) {
+            fruit.setY(fruit.getSize() / 2);
+            fruit.setVy(-fruit.getVy() * 0.8);
+        }
+
+        if (fruit.getY() <= BAR_Y_POSITION) {
+            gameOver = true;
+        }
+    }
+
+    private void handleWallCollisions(Fruit fruit) {
+        if (fruit.getX() - fruit.getSize() / 2 <= 0) {
+            fruit.setX(fruit.getSize() / 2);
+            fruit.setVx(-fruit.getVx() * 0.8); // Bounce back with damping
+        } else if (fruit.getX() + fruit.getSize() / 2 >= width) {
+            fruit.setX(width - fruit.getSize() / 2);
+            fruit.setVx(-fruit.getVx() * 0.8);
+        }
+    }
+
+    private void handleDangerLineLogic(int maxHeight) {
         if (!specialFruitDropped) {
             maxHeight = height;
             for (Fruit fruit : fruits) {
@@ -194,7 +211,6 @@ public class Game {
 
         // Remove expired gates
         gates.removeIf(gate -> !gate.isActive(System.currentTimeMillis()));
-
     }
 
     public void dropFruit() {
@@ -212,14 +228,7 @@ public class Game {
         fruitQueue.add(createRandomFruit(0, 0));
 
         // Decrement freeze stages of all frozen fruits
-        for (Fruit fruit : fruits) {
-            if (fruit.isFrozen()) {
-                fruit.decrementFreezeStage();
-            }
-            if (fruit instanceof BombFruit) {
-                ((BombFruit) fruit).onFruitDropped();
-            }
-        }
+        updateFreezeStage();
 
         lastDroppedFruit = newFruit;
         lastDropTime = currentTime;
@@ -227,6 +236,17 @@ public class Game {
         // Check if it's time to drop a special fruit
         if (dropCount % DROP_INTERVAL == 0) {
             dropSpecialFruit();
+        }
+    }
+
+    private void updateFreezeStage() {
+        for (Fruit fruit : fruits) {
+            if (fruit.isFrozen()) {
+                fruit.decrementFreezeStage();
+            }
+            if (fruit instanceof BombFruit) {
+                ((BombFruit) fruit).onFruitDropped();
+            }
         }
     }
 
