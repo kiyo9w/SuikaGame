@@ -48,6 +48,35 @@ public class Collision {
         }
     }
 
+    public void handleWallCollisions(Fruit fruit, int width) {
+        if (fruit.getX() - fruit.getSize() / 2 <= 0) {
+            fruit.setX(fruit.getSize() / 2);
+            fruit.setVx(-fruit.getVx() * 0.8);
+        } else if (fruit.getX() + fruit.getSize() / 2 >= width) {
+            fruit.setX(width - fruit.getSize() / 2);
+            fruit.setVx(-fruit.getVx() * 0.8);
+        }
+    }
+
+    public void handleGroundAndCeilingCollisions(Fruit fruit, int height) {
+        if (fruit.getY() + fruit.getSize() / 2 >= height) {
+            fruit.setY(height - fruit.getSize() / 2);
+            fruit.setVy(-fruit.getVy() * 0.8);
+            fruit.setVx(fruit.getVx() * 0.95);
+            if (Math.abs(fruit.getVy()) < 10) {
+                fruit.setVy(0);
+            }
+            if (Math.abs(fruit.getVx()) < 0.1) {
+                fruit.setVx(0);
+            }
+        }
+
+        if (fruit.getY() - fruit.getSize() / 2 <= 0) {
+            fruit.setY(fruit.getSize() / 2);
+            fruit.setVy(-fruit.getVy() * 0.8);
+        }
+    }
+
     private void resolveCollision(Fruit f1, Fruit f2, double dx, double dy, double dist, double minDist) {
         double overlap = minDist - dist + 1;
         double totalMass = f1.getSize() + f2.getSize();
