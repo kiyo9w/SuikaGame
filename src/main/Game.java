@@ -34,7 +34,7 @@ public class Game {
     private static final int DROP_INTERVAL = 8;
     private static final int PLAYER_WIDTH = 50;
     private static final int BAR_Y_POSITION = 100;
-    private static final int DROP_DELAY = 2000;
+    private static final int DROP_DELAY = 500;
     private static final int GATE_INTERVAL = 10000;
     private static final int DANGER_LINE = 280;
     private boolean specialFruitDropped = false;
@@ -67,8 +67,7 @@ public class Game {
     }
 
     public void update() {
-        if (gameOver)
-            return;
+        if (gameOver) return;
 
         Set<Fruit> fruitsToRemove = new HashSet<>();
         List<Fruit> fruitsToAdd = new ArrayList<>();
@@ -79,10 +78,10 @@ public class Game {
             fruit.postUpdate(fruits, fruitsToRemove);
 
             // Collision with walls
-            handleWallCollisions(fruit);
+            collisionManager.handleWallCollisions(fruit, width);
 
             // Collision with ground & ceiling
-            handleGroundAndCeilingCollisions(fruit);
+            collisionManager.handleGroundAndCeilingCollisions(fruit, height);
 
             //Collision with gate
             handleGateCollision(fruitsToRemove, fruitsToAdd, fruit);            
@@ -101,6 +100,8 @@ public class Game {
 
         // Calculate the maximum height of the fruits
         handleDangerLineLogic(maxHeight);
+
+        checkGameOverCondition();
 
     }
 
@@ -137,41 +138,7 @@ public class Game {
             }
         }
     }
-
-    private void handleGroundAndCeilingCollisions(Fruit fruit) {
-        if (fruit.getY() + fruit.getSize() / 2 >= height) {
-            fruit.setY(height - fruit.getSize() / 2); // Dont know what bug caused ground to be eaten but gonna fix later :D
-            fruit.setVy(-fruit.getVy() * 0.8);
-            fruit.setVx(fruit.getVx() * 0.95);
-            if (Math.abs(fruit.getVy()) < 10) {
-                fruit.setVy(0);
-            }
-            if (Math.abs(fruit.getVx()) < 0.1) {
-                fruit.setVx(0);
-            }
-        }
-
-        // Collision with ceiling
-        if (fruit.getY() - fruit.getSize() / 2 <= 0) {
-            fruit.setY(fruit.getSize() / 2);
-            fruit.setVy(-fruit.getVy() * 0.8);
-        }
-
-        if (fruit.getY() <= BAR_Y_POSITION) {
-            gameOver = true;
-        }
-    }
-
-    private void handleWallCollisions(Fruit fruit) {
-        if (fruit.getX() - fruit.getSize() / 2 <= 0) {
-            fruit.setX(fruit.getSize() / 2);
-            fruit.setVx(-fruit.getVx() * 0.8); // Bounce back with damping
-        } else if (fruit.getX() + fruit.getSize() / 2 >= width) {
-            fruit.setX(width - fruit.getSize() / 2);
-            fruit.setVx(-fruit.getVx() * 0.8);
-        }
-    }
-
+    
     private void handleDangerLineLogic(int maxHeight) {
         if (!specialFruitDropped) {
             maxHeight = height;
@@ -238,6 +205,15 @@ public class Game {
             dropSpecialFruit();
         }
     }
+
+    private void checkGameOverCondition() {
+        for (Fruit fruit : fruits) {
+            if (fruit.getY() <= BAR_Y_POSITION) {
+                gameOver = true;
+                return;  // If any fruit reaches above the bar, end the game
+            }
+        }
+    }    
 
     private void updateFreezeStage() {
         for (Fruit fruit : fruits) {
