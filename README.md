@@ -5,7 +5,7 @@ We are a group of students collaborating to create a clone of the Suika Game wit
 ## Architecture
 ![462642708_1748079389286325_3866097917277932602_n](https://github.com/user-attachments/assets/8f49ce6c-180c-456d-9834-74e3692d51a9)
 
-special thanks to [@cocooda](https://github.com/cutzee) for designing the UML diagram
+special thanks to [@cocooda](https://github.com/cocooda) for designing the UML diagram
 
 ## Planned Tasks
 
