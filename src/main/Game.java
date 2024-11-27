@@ -1,3 +1,4 @@
+package main;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -5,6 +6,15 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
+import model.BombFruit;
+import model.Collision;
+import model.FreezeFruit;
+import model.Fruit;
+import model.Gate;
+import model.LeaderBoard;
+import model.RainbowFruit;
+import model.ScoreManager;
+import model.SpecialFruit;
 
 public class Game {
     private List<Fruit> fruits;
@@ -57,11 +67,8 @@ public class Game {
     }
 
     public void update() {
-        if (gameOver) {
-           
+        if (gameOver)
             return;
-            
-        }
 
         Set<Fruit> fruitsToRemove = new HashSet<>();
         List<Fruit> fruitsToAdd = new ArrayList<>();
@@ -101,7 +108,6 @@ public class Game {
 
             if (fruit.getY() <= BAR_Y_POSITION) {
                 gameOver = true;
-                System.out.println("Fruit has hit the bar.");
             }
 
             //Collision with gate
@@ -193,34 +199,34 @@ public class Game {
 
     public void dropFruit() {
         long currentTime = System.currentTimeMillis();
-        if (lastDroppedFruit == null || (currentTime - lastDropTime >= DROP_DELAY)) {
-            Fruit newFruit = fruitQueue.poll();
-            if (newFruit != null) {
-                newFruit.setX(playerX + PLAYER_WIDTH / 2);
-                newFruit.setY(BAR_Y_POSITION + 20);
-                fruits.add(newFruit);
-                dropCount++;
-                // Generate a new fruit and add it to the end of the queue
-                fruitQueue.add(createRandomFruit(0, 0));
+        if (lastDroppedFruit != null && (currentTime - lastDropTime < DROP_DELAY)) return;
+        
+        Fruit newFruit = fruitQueue.poll();
+        if (newFruit == null) return;
 
-                // Decrement freeze stages of all frozen fruits
-                for (Fruit fruit : fruits) {
-                    if (fruit.isFrozen()) {
-                        fruit.decrementFreezeStage();
-                    }
-                    if (fruit instanceof BombFruit) {
-                        ((BombFruit) fruit).onFruitDropped();
-                    }
-                }
+        newFruit.setX(playerX + PLAYER_WIDTH / 2);
+        newFruit.setY(BAR_Y_POSITION + 20);
+        fruits.add(newFruit);
+        dropCount++;
+        // Generate a new fruit and add it to the end of the queue
+        fruitQueue.add(createRandomFruit(0, 0));
 
-                lastDroppedFruit = newFruit;
-                lastDropTime = currentTime;
-
-                // Check if it's time to drop a special fruit
-                if (dropCount % DROP_INTERVAL == 0) {
-                    dropSpecialFruit();
-                }
+        // Decrement freeze stages of all frozen fruits
+        for (Fruit fruit : fruits) {
+            if (fruit.isFrozen()) {
+                fruit.decrementFreezeStage();
             }
+            if (fruit instanceof BombFruit) {
+                ((BombFruit) fruit).onFruitDropped();
+            }
+        }
+
+        lastDroppedFruit = newFruit;
+        lastDropTime = currentTime;
+
+        // Check if it's time to drop a special fruit
+        if (dropCount % DROP_INTERVAL == 0) {
+            dropSpecialFruit();
         }
     }
 
@@ -314,6 +320,10 @@ public class Game {
         return BAR_Y_POSITION;
     }
 
+    public int getDangerLineY(){
+        return DANGER_LINE;
+    }
+
     public ScoreManager getScoreManager() {
         return scoreManager;
     }
@@ -331,4 +341,4 @@ public class Game {
         lastDroppedFruit = null;
         lastDropTime = 0;  
     }
-}
+} 
