@@ -1,4 +1,9 @@
+package main;
 import javax.swing.*;
+
+import model.LeaderBoard;
+import view.BackgroundPanel;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

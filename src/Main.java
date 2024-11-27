@@ -1,5 +1,6 @@
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import main.GameFrame;
 
 public class Main {
     public static void main(String[] args) {

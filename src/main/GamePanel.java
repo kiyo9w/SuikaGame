@@ -1,3 +1,5 @@
+package main;
+import controller.InputHandler;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -6,6 +8,11 @@ import java.awt.RenderingHints;
 import java.util.List;
 import java.util.Queue;
 import javax.swing.JPanel;
+import model.Fruit;
+import model.Gate;
+import model.ScorePopup;
+import view.ScoreBoard;
+import model.LeaderBoard;
 
 public class GamePanel extends JPanel {
     private Game game;
@@ -85,7 +92,7 @@ public class GamePanel extends JPanel {
         }
 
         // Draw the danger line
-        int dangerLineY = 280;
+        int dangerLineY = game.getDangerLineY();
         g2d.setColor(Color.RED);
         g2d.drawLine(0, dangerLineY, width, dangerLineY);
         g2d.setFont(new Font("Comic Sans MS", Font.BOLD, 14));

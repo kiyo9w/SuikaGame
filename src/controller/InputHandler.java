@@ -1,4 +1,8 @@
+package controller;
 import java.awt.event.*;
+
+import main.Game;
+import main.GamePanel;
 
 public class InputHandler implements KeyListener, MouseListener, MouseMotionListener {
     private Game game;

@@ -1,10 +1,11 @@
+package model;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
+import javax.imageio.ImageIO;
 
 public class Fruit {
     private double x, y;
