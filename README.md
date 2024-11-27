@@ -2,6 +2,11 @@
 
 We are a group of students collaborating to create a clone of the Suika Game with physics using Java. We also introduced various customized features and effects including: bomb, freeze, rainbow, gates, level design (planned). This project is intended for our submission for the class CS 3360 - Dr Dung.
 
+## Architecture
+![462642708_1748079389286325_3866097917277932602_n](https://github.com/user-attachments/assets/8f49ce6c-180c-456d-9834-74e3692d51a9)
+
+special thanks to [@cocooda](https://github.com/cutzee) for designing the UML diagram
+
 ## Planned Tasks
 
 | Task                                                                                | Weight | Status       |
@@ -22,7 +27,9 @@ We are a group of students collaborating to create a clone of the Suika Game wit
 | Develop main interface screen with play and credits buttons                         | Medium | Partially    |
 | Game over screen: add return to home screen button                                  | Low    | Completed    |
 | Implement special drop gate effects (e.g., x2 dropped fruits, rainbow fruits, etc.) | High   | Completed    |
-| Implement different fruit shape (oval for fruit like mango or long strip like banana| High   | In progress  |
+| Draw an UML diagram to represent the classes hierarchy                              | High   | Completed    |
+| Redesign the architecture of the project to follow a MVC approach                   | High   | Planned      |
+| Implement different fruit shape (oval for fruit like mango or long strip like banana| High   | Planned      |
 | Implement combo system when stacking multiple merges in one drop                    | Low    | In progress  |
 | Add an achivement system                                                            | Low    | Not Started  |
 | Make specials feature toggleable (can be turned on or off)                          | Low    | Not Started  |
