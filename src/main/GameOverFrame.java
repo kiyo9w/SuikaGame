@@ -71,7 +71,7 @@ public class GameOverFrame extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 dispose(); 
                 closeGameFrame(); 
-                new GameFrame("PlayerName").setVisible(true); 
+                new GameFrame(JOptionPane.showInputDialog("Enter your name:")).setVisible(true);
             }
         });
 

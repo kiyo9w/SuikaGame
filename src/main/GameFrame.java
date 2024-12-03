@@ -177,11 +177,4 @@ public class GameFrame extends JFrame {
         });
         timer.start();
     }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            GameFrame frame = new GameFrame("PlayerName");
-            frame.setVisible(true);
-        });
-    }
 }
