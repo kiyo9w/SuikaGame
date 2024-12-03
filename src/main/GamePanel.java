@@ -1,5 +1,4 @@
 package main;
-import controller.InputHandler;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -11,7 +10,6 @@ import javax.swing.JPanel;
 import model.Fruit;
 import model.Gate;
 import model.ScorePopup;
-import view.ScoreBoard;
 
 public class GamePanel extends JPanel {
     private static final Font GAME_OVER_FONT = new Font("Comic Sans MS", Font.BOLD, 48);
