@@ -3,9 +3,9 @@
 We are a group of students collaborating to create a clone of the Suika Game with physics using Java. We also introduced various customized features and effects including: bomb, freeze, rainbow, gates, level design (planned). This project is intended for our submission for the class CS 3360 - Dr Dung.
 
 ## Architecture
-![462642708_1748079389286325_3866097917277932602_n](https://github.com/user-attachments/assets/8f49ce6c-180c-456d-9834-74e3692d51a9)
+<img src="src/resources/architecture/ver3.png" alt="Class Diagram">
 
-special thanks to [@cocooda](https://github.com/cocooda) for designing the UML diagram
+special thanks to [@cocooda](https://github.com/cocooda) for designing the UML diagram, and [@kiyo9w](https://github.com/kiyo9w) for polishing it, older version can be found [here](https://github.com/kiyo9w/SuikaGame/tree/main/src/resources/architecture)
 
 ## Planned Tasks
 
