@@ -42,6 +42,7 @@ public class GamePanel extends JPanel {
         WavPlayer.playClickSound();
     }
 });
+WavPlayer.playBackgroundMusic("C:\\\\Users\\\\ASUS TUF\\\\SuikaCloneCS3360\\\\src\\\\resources\\\\sound\\\\background.wav"); 
         
     }
 
@@ -97,6 +98,7 @@ public class GamePanel extends JPanel {
         // Game over screen
         if (game.isGameOver()) {
             drawGameOverSCreen(g2d, width, height);
+            WavPlayer.stopBackgroundMusic();
         }
     }
 

@@ -5,6 +5,7 @@ import javax.sound.sampled.*;
 
 public class WavPlayer {
     // Phương thức chung để phát âm thanh từ file
+    private static Clip clip;
     public static void playSound(String filePath) {
         try {
             File soundFile = new File(filePath);
@@ -45,5 +46,24 @@ public class WavPlayer {
     
         // Phát âm thanh
         playSound(filePath);
+    }
+    public static void playBackgroundMusic(String filePath) {
+        try {
+            File soundFile = new File(filePath);
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(soundFile);
+            clip = AudioSystem.getClip();
+            clip.open(audioStream);
+
+            // Đặt nhạc nền lặp lại vô hạn
+            clip.loop(Clip.LOOP_CONTINUOUSLY);
+            clip.start();
+        } catch (Exception e) {
+            System.err.println("Error playing background music: " + e.getMessage());
+        }
+    }
+    public static void stopBackgroundMusic() {
+        if (clip != null && clip.isRunning()) {
+            clip.stop();
+        }
     }
 }
