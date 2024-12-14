@@ -1,4 +1,5 @@
 package main;
+
 import java.awt.event.*;
 
 import main.Game;
@@ -27,6 +28,7 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
     @Override
     public void mouseClicked(MouseEvent e) {
         game.dropFruit();
+        WavPlayer.playClickSound();
     }
 
     @Override
@@ -40,6 +42,7 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
             game.setPlayerX(playerX);
         } else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             game.dropFruit();
+            WavPlayer.playClickSound(); // Play sound on Space key press
         }
         gamePanel.repaint();
     }

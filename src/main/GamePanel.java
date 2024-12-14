@@ -1,15 +1,19 @@
 package main;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.Queue;
 import javax.swing.JPanel;
 import model.Fruit;
 import model.Gate;
 import model.ScorePopup;
+
 
 public class GamePanel extends JPanel {
     private static final Font GAME_OVER_FONT = new Font("Comic Sans MS", Font.BOLD, 48);
@@ -29,7 +33,7 @@ public class GamePanel extends JPanel {
         setOpaque(false);
 
         scoreBoard = new ScoreBoard();
-
+WavPlayer.playBackgroundMusic("src/resources/sound/background.wav");
         
     }
 
@@ -85,6 +89,7 @@ public class GamePanel extends JPanel {
         // Game over screen
         if (game.isGameOver()) {
             drawGameOverSCreen(g2d, width, height);
+            WavPlayer.stopBackgroundMusic();
         }
     }
 
