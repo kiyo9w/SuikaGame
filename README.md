@@ -1,6 +1,6 @@
-# Suika Game Clone with Physics
+# Suika Game
 
-We are a group of students collaborating to create a clone of the Suika Game with physics using Java. We also introduced various customized features and effects including: bomb, freeze, rainbow, gates, level design (planned). This project is intended for our submission for the class CS 3360 - Dr Dung.
+We are a group of students collaborating to create a clone of the hit game Suika using Java. We also introduced various customized features and effects including: bomb, freeze, rainbow, gates and level design (planned). This project is intended for our submission for the class CS 3360 - Dr Dung.
 
 ## Architecture
 <img src="src/resources/architecture/ver3.png" alt="Class Diagram">
@@ -33,7 +33,7 @@ special thanks to [@cocooda](https://github.com/cocooda) for designing the UML d
 | Implement combo system when stacking multiple merges in one drop                    | Low    | In progress  |
 | Add an achivement system                                                            | Low    | Not Started  |
 | Make specials feature toggleable (can be turned on or off)                          | Low    | Not Started  |
-| Implement sound effects and background music                                        | Low    | Not Started  |
+| Implement sound effects and background music                                        | Low    | Completed    |
 | Implement level selection features                                                  | High   | Planned      |
 | Optimize game performance                                                           | Medium | Planned      |
 | Add more special fruits and effects                                                 | Medium | Planned      |
