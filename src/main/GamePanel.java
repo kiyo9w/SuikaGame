@@ -33,16 +33,7 @@ public class GamePanel extends JPanel {
         setOpaque(false);
 
         scoreBoard = new ScoreBoard();
- // Thêm sự kiện chuột để phát âm thanh khi nhấn
- addMouseListener(new MouseAdapter() {
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        super.mouseClicked(e);
-        // Phát âm thanh click
-        WavPlayer.playClickSound();
-    }
-});
-WavPlayer.playBackgroundMusic("C:\\\\Users\\\\ASUS TUF\\\\SuikaCloneCS3360\\\\src\\\\resources\\\\sound\\\\background.wav"); 
+WavPlayer.playBackgroundMusic("src/resources/sound/background.wav");
         
     }
 

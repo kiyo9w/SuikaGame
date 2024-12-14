@@ -25,9 +25,9 @@ public class WavPlayer {
 
          String filePath;
     if (soundChoice == 1) {
-        filePath = "C:\\Users\\ASUS TUF\\SuikaCloneCS3360\\src\\resources\\sound\\fall1.wav";
+        filePath = "src/resources/sound/fall1.wav";
     } else {
-        filePath = "C:\\Users\\ASUS TUF\\SuikaCloneCS3360\\src\\resources\\sound\\fall2.wav";
+        filePath = "src/resources/sound/fall2.wav";
     }
 
     // Phát âm thanh
@@ -39,9 +39,9 @@ public class WavPlayer {
     
              String filePath;
         if (soundChoice == 1) {
-            filePath = "C:\\Users\\ASUS TUF\\SuikaCloneCS3360\\src\\resources\\sound\\merge1.wav";
+            filePath = "src/resources/sound/merge1.wav";
         } else {
-            filePath = "C:\\Users\\ASUS TUF\\SuikaCloneCS3360\\src\\resources\\sound\\merge2.wav";
+            filePath = "src/resources/sound/merge2.wav";
         }
     
         // Phát âm thanh
