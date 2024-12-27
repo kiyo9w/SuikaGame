@@ -28,6 +28,7 @@ public class Game {
     private long lastGateTime;
     private int width;
     private int height;
+    private WavPlayer wavPlayer;
     private Random random;
     private Collision collisionManager;
     private ScoreManager scoreManager;
@@ -89,7 +90,7 @@ public class Game {
         }
             
         // Handle collisions using CollisionManager
-        collisionManager.handleCollisions(fruits, fruitsToRemove, fruitsToAdd);
+        collisionManager.handleCollisions(fruits, fruitsToRemove, fruitsToAdd,wavPlayer);
 
         fruits.removeAll(fruitsToRemove);
         fruits.addAll(fruitsToAdd);
