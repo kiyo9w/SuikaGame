@@ -253,11 +253,11 @@ public class Game {
         int fruitType = getRandomFruitType();
         return new Fruit(x, y, fruitType);
     }
-    public void endGame() {
+    public void endGame(String playerName) {
         int finalScore = scoreManager.getScore();
         // Need to implement: stop everything movement
         // Lưu điểm vào bảng xếp hạng
-        leaderboard.addScore(finalScore);
+        leaderboard.addScore(playerName,finalScore);
     }
 
     private int getRandomFruitType() {

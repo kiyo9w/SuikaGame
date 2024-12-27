@@ -117,12 +117,17 @@ public class GameFrame extends JFrame {
 
         // Load high scores from LeaderBoard class
         LeaderBoard leaderboard = new LeaderBoard("scores.txt");
-        List<Integer> topScores = leaderboard.getTopScores(10);
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < topScores.size(); i++) {
-            sb.append((i + 1) + ". " + topScores.get(i) + "\n");
-        }
-        highScoreArea.setText(sb.toString());
+List<LeaderBoard.PlayerScore> topScores = leaderboard.getTopScores(10); // Lấy top 10 tên và điểm
+StringBuilder sb = new StringBuilder();
+
+// Duyệt qua danh sách top điểm
+for (int i = 0; i < topScores.size(); i++) {
+    LeaderBoard.PlayerScore score = topScores.get(i);
+    sb.append((i + 1) + ". " + score.getPlayerName() + " - " + score.getScore() + "\n"); // Hiển thị tên và điểm
+}
+
+// Cập nhật text vào `highScoreArea`
+highScoreArea.setText(sb.toString());
 
         // Top panel for current score and player name
         JPanel topPanel = new JPanel();
@@ -166,7 +171,7 @@ public class GameFrame extends JFrame {
                     // GameOverFrame gameOverFrame = new GameOverFrame();
                     // gameOverFrame.setVisible(true);
                 } else {
-                    game.endGame();
+                    game.endGame(playerName);
                     // Show the GameOverFrame without disposing the GameFrame
                     GameOverFrame gameOverFrame = new GameOverFrame();
                     gameOverFrame.setVisible(true);
