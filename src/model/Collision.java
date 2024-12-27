@@ -53,29 +53,29 @@ public class Collision {
     public void handleWallCollisions(Fruit fruit, int width) {
         if (fruit.getX() - fruit.getSize() / 2 <= 0) {
             fruit.setX(fruit.getSize() / 2);
-            fruit.setVx(-fruit.getVx() * 0.8);
+            fruit.setVx(-fruit.getVx() * 0.5);
         } else if (fruit.getX() + fruit.getSize() / 2 >= width) {
             fruit.setX(width - fruit.getSize() / 2);
-            fruit.setVx(-fruit.getVx() * 0.8);
+            fruit.setVx(-fruit.getVx() * 0.5);
         }
     }
 
     public void handleGroundAndCeilingCollisions(Fruit fruit, int height) {
         if (fruit.getY() + fruit.getSize() / 2 >= height) {
             fruit.setY(height - fruit.getSize() / 2);
-            fruit.setVy(-fruit.getVy() * 0.8);
-            fruit.setVx(fruit.getVx() * 0.95);
-            if (Math.abs(fruit.getVy()) < 10) {
+            fruit.setVy(-fruit.getVy() * 0.3);
+            fruit.setVx(fruit.getVx() * 0.9);
+            if (Math.abs(fruit.getVy()) < 5) {
                 fruit.setVy(0);
             }
-            if (Math.abs(fruit.getVx()) < 0.1) {
+            if (Math.abs(fruit.getVx()) < 0.05) {
                 fruit.setVx(0);
             }
         }
 
         if (fruit.getY() - fruit.getSize() / 2 <= 0) {
             fruit.setY(fruit.getSize() / 2);
-            fruit.setVy(-fruit.getVy() * 0.8);
+            fruit.setVy(-fruit.getVy() * 0.3);
         }
     }
 
@@ -108,16 +108,12 @@ public class Collision {
         double m2Norm = (dpNorm2 * (f2.getSize() - f1.getSize()) + 2 * f1.getSize() * dpNorm1)
                 / (f1.getSize() + f2.getSize());
 
-        f1.setVx(tx * dpTan1 + nx * m1Norm);
-        f1.setVy(ty * dpTan1 + ny * m1Norm);
-        f2.setVx(tx * dpTan2 + nx * m2Norm);
-        f2.setVy(ty * dpTan2 + ny * m2Norm);
-
-        // Damping to simulate energy loss
-        f1.setVx(f1.getVx() * 0.95);
-        f1.setVy(f1.getVy() * 0.95);
-        f2.setVx(f2.getVx() * 0.95);
-        f2.setVy(f2.getVy() * 0.95);
+        // Apply velocities with increased damping
+        double dampingFactor = 0.7;
+        f1.setVx((tx * dpTan1 + nx * m1Norm) * dampingFactor);
+        f1.setVy((ty * dpTan1 + ny * m1Norm) * dampingFactor);
+        f2.setVx((tx * dpTan2 + nx * m2Norm) * dampingFactor);
+        f2.setVy((ty * dpTan2 + ny * m2Norm) * dampingFactor);
     }
     
 }

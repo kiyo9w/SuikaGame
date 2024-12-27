@@ -10,7 +10,8 @@ import javax.imageio.ImageIO;
 public class Fruit {
     private double x, y;
     private double vx, vy;
-    private static final double GRAVITY = 0.5;
+    private static final double GRAVITY = 0.3;
+    private static final double FRICTION = 0.98;
     private int type;
     private int size;
     protected BufferedImage image;
@@ -33,7 +34,10 @@ public class Fruit {
             return; // Skip movement if frozen
         }
         // Apply gravity
-        vy += GRAVITY; // Gravity acceleration
+        vy += GRAVITY;
+        // Apply friction to horizontal movement
+        vx *= FRICTION;
+        // Update position
         x += vx;
         y += vy;
     }
@@ -60,45 +64,21 @@ public class Fruit {
     }
 
     private void loadImage() {
-        String imagePath = "";
-        switch (type) {
-            case 1:
-                imagePath = "/resources/strawberry.png";
-                break;
-            case 2:
-                imagePath = "/resources/cherry.png";
-                break;
-            case 3:
-                imagePath = "/resources/orange.png";
-                break;
-            case 4:
-                imagePath = "/resources/peach.png";
-                break;
-            case 5:
-                imagePath = "/resources/apple.png";
-                break;
-            case 6:
-                imagePath = "/resources/yellowmelon.png";
-                break;
-            case 7:
-                imagePath = "/resources/grapes.png";
-                break;
-            case 8:
-                imagePath = "/resources/pineapple.png";
-                break;
-            case 9:
-                imagePath = "/resources/suika.png";
-                break;
-            case -1:
-                imagePath = "/resources/bomb.png";
-                break;
-            case -2:
-                imagePath = "/resources/rainbow.png";
-                break;
-            case -3:
-                imagePath = "/resources/snowflake.png";
-                break;
-        }
+        String imagePath = switch (type) {
+            case 1 -> "/resources/strawberry.png";
+            case 2 -> "/resources/cherry.png";
+            case 3 -> "/resources/orange.png";
+            case 4 -> "/resources/peach.png";
+            case 5 -> "/resources/apple.png";
+            case 6 -> "/resources/yellowmelon.png";
+            case 7 -> "/resources/grapes.png";
+            case 8 -> "/resources/pineapple.png";
+            case 9 -> "/resources/suika.png";
+            case -1 -> "/resources/bomb.png";
+            case -2 -> "/resources/rainbow.png";
+            case -3 -> "/resources/snowflake.png";
+            default -> "";
+        };
 
         try {
             image = ImageIO.read(getClass().getResourceAsStream(imagePath));
@@ -110,7 +90,6 @@ public class Fruit {
             // Handle the case where the resource is not found
         }
     }
-
 
     // Back-up for when image assets doesnt load, considering removinng later
     private Color getColor() {
@@ -201,7 +180,6 @@ public class Fruit {
 //        int mouthY = drawPosY + displaySize / 2 + displaySize / 6;
 //        g.drawArc(mouthX, mouthY, mouthWidth, mouthHeight, 0, -180);
     }
-
 
     // Getters and setters
     public double getX() { return x; }

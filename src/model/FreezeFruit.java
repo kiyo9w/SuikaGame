@@ -9,6 +9,7 @@ import java.util.Set;
 public class FreezeFruit extends SpecialFruit {
     private int countdown;
     private static final int COUNTDOWN_DURATION = 100;
+    private static final int DANGER_LINE = 280;
 
     public FreezeFruit(double x, double y, int type) {
         super(x, y, type);
@@ -34,7 +35,7 @@ public class FreezeFruit extends SpecialFruit {
         // Find the 5 closest fruits and freeze them
         List<FruitDistance> distances = new ArrayList<>();
         for (Fruit fruit : fruits) {
-            if (fruit != this && !fruit.isFrozen()) {
+            if (fruit != this && !fruit.isFrozen() && fruit.getY() > DANGER_LINE) {
                 double distance = Math.hypot(fruit.getX() - getX(), fruit.getY() - getY());
                 distances.add(new FruitDistance(fruit, distance));
             }
