@@ -5,8 +5,6 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.Queue;
 import javax.swing.JPanel;
@@ -33,7 +31,7 @@ public class GamePanel extends JPanel {
         setOpaque(false);
 
         scoreBoard = new ScoreBoard();
-WavPlayer.playBackgroundMusic("src/resources/sound/background.wav");
+WavPlayer.playBackgroundMusic("C:\\Users\\ASUS TUF\\SuikaCloneCS3360\\src\\resources\\sound\\background.wav");
         
     }
 

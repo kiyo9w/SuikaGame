@@ -41,7 +41,7 @@ public class Collision {
                         double popupX = newFruit.getX() ;
                         double popupY = newFruit.getY() ;
                         scoreManager.addPoints(level, popupX, popupY);
-                        playMergeSound();
+                        WavPlayer.playMergeSound();
 
                         break; // Exit inner loop to prevent concurrent modification
                     }
@@ -119,12 +119,5 @@ public class Collision {
         f2.setVx(f2.getVx() * 0.95);
         f2.setVy(f2.getVy() * 0.95);
     }
-     private void playMergeSound() {
-        try {
-            // Gọi lớp WavPlayer để phát âm thanh merge
-            WavPlayer.playMergeSound();
-        } catch (Exception e) {
-            System.err.println("Error playing merge sound: " + e.getMessage());
-        }
-    }
+    
 }
