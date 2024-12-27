@@ -10,7 +10,7 @@ public class Collision {
         this.scoreManager = scoreManager;
     }
 
-    public void handleCollisions(List<Fruit> fruits, Set<Fruit> fruitsToRemove, List<Fruit> fruitsToAdd) {
+    public void handleCollisions(List<Fruit> fruits, Set<Fruit> fruitsToRemove, List<Fruit> fruitsToAdd,WavPlayer wavPlayer) {
         for (int i = 0; i < fruits.size(); i++) {
             Fruit f1 = fruits.get(i);
             if (fruitsToRemove.contains(f1)) continue;
@@ -41,7 +41,7 @@ public class Collision {
                         double popupX = newFruit.getX() ;
                         double popupY = newFruit.getY() ;
                         scoreManager.addPoints(level, popupX, popupY);
-                        playMergeSound();
+                        wavPlayer.playMergeSound();
 
                         break; // Exit inner loop to prevent concurrent modification
                     }
@@ -119,12 +119,5 @@ public class Collision {
         f2.setVx(f2.getVx() * 0.95);
         f2.setVy(f2.getVy() * 0.95);
     }
-     private void playMergeSound() {
-        try {
-            // Gọi lớp WavPlayer để phát âm thanh merge
-            WavPlayer.playMergeSound();
-        } catch (Exception e) {
-            System.err.println("Error playing merge sound: " + e.getMessage());
-        }
-    }
+    
 }

@@ -31,6 +31,7 @@ public class Game {
     private Random random;
     private Collision collisionManager;
     private ScoreManager scoreManager;
+    private WavPlayer wavPlayer;
     private static final int DROP_INTERVAL = 8;
     private static final int PLAYER_WIDTH = 50;
     private static final int BAR_Y_POSITION = 100;
@@ -89,7 +90,7 @@ public class Game {
         }
             
         // Handle collisions using CollisionManager
-        collisionManager.handleCollisions(fruits, fruitsToRemove, fruitsToAdd);
+        collisionManager.handleCollisions(fruits, fruitsToRemove, fruitsToAdd,wavPlayer);
 
         fruits.removeAll(fruitsToRemove);
         fruits.addAll(fruitsToAdd);
